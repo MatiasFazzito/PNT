@@ -8,9 +8,9 @@ Repositorio correspondiente a la materia **Programación en Nuevas Tecnologías 
 
 ## 👥 Integrantes del grupo
 
-- **Matias Fazzito**
 - **Luciano Vivineto**
 - **Matias Meta**
+- **Matias Fazzito**
 
 ## 🎓 Carrera
 

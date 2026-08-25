@@ -1,4 +1,4 @@
-# Programación en Nuevas Tecnologías
+# Programación en Nuevas Tecnologías (PNT)
 
 Repositorio correspondiente a la materia **Programación en Nuevas Tecnologías (PNT)** de la carrera **Analista en Sistemas** de **Asociación ORT Argentina**.
 
@@ -23,7 +23,6 @@ Repositorio correspondiente a la materia **Programación en Nuevas Tecnologías 
 **Programación en Nuevas Tecnologías (PNT)**
 
 ---
-
 Este repositorio contiene los trabajos prácticos, ejercicios, proyectos y demás actividades realizadas durante la cursada de la materia.
 
 ## COMANDOS IMPORTANTES

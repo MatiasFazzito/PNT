@@ -1,29 +1,29 @@
 package burgerflow.PNT.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import burgerflow.PNT.service.DataService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import burgerflow.PNT.service.DataService;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/cocina")
 public class KitchenController {
 
-    @Autowired
-    private DataService dataService;
+    private final DataService dataService;
 
-    @GetMapping("/cocina")
-    public String panelCocina(Model model) {
+    public KitchenController(DataService dataService) {
+        this.dataService = dataService;
+    }
+
+    @GetMapping
+    public String verCocina(Model model) {
         model.addAttribute("pedidos", dataService.getPedidos());
         return "cocina";
     }
 
-    @PostMapping("/cocina/cambiar-estado")
-    public String cambiarEstado(@RequestParam Long pedidoId, @RequestParam String nuevoEstado) {
-        dataService.cambiarEstadoPedido(pedidoId, nuevoEstado);
+    @PostMapping("/pedido/estado")
+    public String cambiarEstadoPedido(@RequestParam Long id, @RequestParam String estado) {
+        dataService.cambiarEstadoPedido(id, estado);
         return "redirect:/cocina";
     }
 }

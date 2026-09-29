@@ -1,7 +1,6 @@
 package burgerflow.PNT.service;
 
 import org.springframework.stereotype.Service;
-
 import burgerflow.PNT.model.Pedido;
 import burgerflow.PNT.model.Producto;
 
@@ -28,6 +27,33 @@ public class DataService {
     public void agregarProducto(Producto producto) {
         producto.setId((long) (productos.size() + 1));
         productos.add(producto);
+    }
+
+    // Guarda un producto nuevo o actualiza uno existente
+    public void guardarProducto(Producto producto) {
+        if (producto.getId() != null && producto.getId() > 0) {
+            for (int i = 0; i < productos.size(); i++) {
+                if (productos.get(i).getId().equals(producto.getId())) {
+                    productos.set(i, producto);
+                    return;
+                }
+            }
+        } else {
+            agregarProducto(producto);
+        }
+    }
+
+    // Busca un producto por ID
+    public Producto getProductoPorId(Long id) {
+        return productos.stream()
+                .filter(p -> p.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    // Elimina un producto por ID
+    public void eliminarProducto(Long id) {
+        productos.removeIf(p -> p.getId().equals(id));
     }
 
     public void cambiarEstadoPedido(Long id, String nuevoEstado) {

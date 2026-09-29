@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>BurgerFlow - Cocina</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="container">
+        <h2 style="margin-bottom: 1.5rem;">Panel de Cocina</h2>
+        <div class="grid">
+            <div class="card" th:each="pedido : ${pedidos}">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                    <h3>Pedido #<span th:text="${pedido.id}">100</span></h3>
+                    <span class="badge" th:text="${pedido.estado}">Estado</span>
+                </div>
+                <p><strong>Cliente:</strong> <span th:text="${pedido.clienteEmail}" style="color: var(--text-muted);">email</span></p>
+                <p><strong>Tipo:</strong> <span th:text="${pedido.tipoEntrega}" style="color: var(--text-muted);">Delivery</span></p>
+                <p class="price" style="font-size: 1.1rem;" th:text="${'$' + pedido.total}">$0.0</p>
+                
+                <form th:action="@{/cocina/cambiar-estado}" method="post" style="margin-top: 1rem;">
+                    <input type="hidden" name="pedidoId" th:value="${pedido.id}" />
+                    <div class="form-group">
+                        <label>Actualizar Estado:</label>
+                        <select name="nuevoEstado" class="form-control">
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="En preparación">En preparación</option>
+                            <option value="Listo para entregar">Listo para entregar</option>
+                            <option value="Entregado">Entregado</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-block">Actualizar</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

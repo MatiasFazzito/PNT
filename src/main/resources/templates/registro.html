@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>BurgerFlow - Registro</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="container">
+        <div class="card form-card">
+            <h2>Crear Cuenta</h2>
+            <form th:action="@{/registro}" th:object="${usuario}" method="post" onsubmit="return validarRegistro();">
+                <div class="form-group">
+                    <label>Nombre Completo:</label>
+                    <input type="text" th:field="*{nombre}" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="email" th:field="*{email}" class="form-control" required placeholder="usuario@dominio.com">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña (Mínimo 8 caracteres, 1 letra y 1 número):</label>
+                    <input type="password" id="password" th:field="*{password}" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-block">Registrarse</button>
+            </form>
+        </div>
+    </main>
+
+    <script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

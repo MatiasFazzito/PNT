@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>BurgerFlow - Inicio</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <main class="container">
+        <div class="card" style="text-align: center; padding: 4rem 2rem;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Bienvenido a BurgerFlow 🍔</h1>
+            <p style="color: var(--text-muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto 2rem auto;">
+                Sabor artesanal, gestión ágil. Realizá tu pedido o administrá la cocina en tiempo real.
+            </p>
+            <div>
+                <a href="/menu" class="btn" style="font-size: 1.1rem; padding: 0.9rem 2rem;">Explorar el Menú</a>
+            </div>
+        </div>
+    </main>
+
+    <script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

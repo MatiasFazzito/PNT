@@ -1,0 +1,411 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --char: #1d1712;
+  --paper: #f4ecd8;
+  --paper-dim: #e7dcc0;
+  --mustard: #e3a72e;
+  --tomato: #c1401b;
+  --pickle: #5c7a3a;
+  --ink: #2a2015;
+  --ink-soft: #5a4f40;
+  --line: #d8c9a3;
+  --font-display: 'Anton', 'Arial Narrow', sans-serif;
+  --font-body: 'Work Sans', -apple-system, 'Segoe UI', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+a { color: inherit; }
+
+img { max-width: 100%; display: block; }
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- Encabezado tipo cartel de parrilla ---------- */
+.top-bar {
+  background: var(--char);
+  color: var(--paper);
+  border-bottom: 6px solid var(--tomato);
+}
+
+.top-bar .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  letter-spacing: 0.5px;
+  color: var(--mustard);
+  text-decoration: none;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.brand span {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--paper-dim);
+  letter-spacing: 0.3px;
+}
+
+nav.main-nav {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+nav.main-nav a {
+  text-decoration: none;
+  color: var(--paper-dim);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding-bottom: 3px;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+nav.main-nav a:hover,
+nav.main-nav a.active {
+  color: var(--mustard);
+  border-color: var(--mustard);
+}
+
+#nav-usuario {
+  font-size: 0.85rem;
+  color: var(--paper-dim);
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  background: var(--char);
+  color: var(--paper);
+  padding: 56px 0 64px;
+  position: relative;
+}
+
+.hero .wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: center; }
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  line-height: 0.98;
+  margin: 0 0 16px;
+  color: var(--paper);
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--mustard);
+}
+
+.hero p {
+  color: var(--paper-dim);
+  font-size: 1.05rem;
+  max-width: 46ch;
+  margin: 0 0 24px;
+}
+
+.hero-ticket {
+  background: var(--paper);
+  color: var(--ink);
+  padding: 22px 24px;
+  border: 2px dashed var(--tomato);
+  font-family: 'Work Sans', monospace;
+}
+
+.hero-ticket h3 {
+  font-family: var(--font-display);
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+  color: var(--tomato);
+}
+
+.hero-ticket ul { margin: 0; padding-left: 18px; font-size: 0.92rem; }
+.hero-ticket li { margin-bottom: 6px; }
+
+@media (max-width: 780px) {
+  .hero .wrap { grid-template-columns: 1fr; }
+}
+
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 3px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+
+.btn:active { transform: translateY(1px); }
+
+.btn-primary { background: var(--tomato); color: var(--paper); }
+.btn-primary:hover { background: #a6350f; }
+
+.btn-secondary { background: var(--mustard); color: var(--char); }
+.btn-secondary:hover { background: #cf9522; }
+
+.btn-outline { background: transparent; border-color: var(--char); color: var(--char); }
+.btn-outline:hover { background: var(--char); color: var(--paper); }
+
+.btn-danger { background: transparent; border-color: var(--tomato); color: var(--tomato); }
+.btn-danger:hover { background: var(--tomato); color: var(--paper); }
+
+.btn-sm { padding: 7px 14px; font-size: 0.8rem; }
+.btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+
+/* ---------- Secciones ---------- */
+main { padding: 44px 0 80px; }
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  margin: 0 0 6px;
+  color: var(--char);
+}
+
+.section-sub { color: var(--ink-soft); margin: 0 0 28px; max-width: 60ch; }
+
+.filtros {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.filtro-chip {
+  border: 2px solid var(--char);
+  background: transparent;
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--char);
+}
+
+.filtro-chip.activo { background: var(--char); color: var(--mustard); }
+
+/* ---------- Grilla de productos ---------- */
+.grid-productos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 22px;
+}
+
+.card-producto {
+  background: #fffaf0;
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--mustard);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-producto.sin-stock { border-left-color: var(--ink-soft); opacity: 0.65; }
+
+.card-producto .categoria {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--tomato);
+  letter-spacing: 0.3px;
+}
+
+.card-producto h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin: 0;
+  color: var(--char);
+}
+
+.card-producto p { margin: 0; color: var(--ink-soft); font-size: 0.9rem; flex-grow: 1; }
+
+.card-producto .fila-precio {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.precio { font-family: var(--font-display); font-size: 1.3rem; color: var(--tomato); }
+.stock-info { font-size: 0.78rem; color: var(--pickle); }
+.stock-info.agotado { color: var(--tomato); font-weight: 700; }
+
+/* ---------- Formularios ---------- */
+.form-card {
+  max-width: 440px;
+  margin: 0 auto;
+  background: #fffaf0;
+  border: 1px solid var(--line);
+  padding: 32px;
+}
+
+.form-card h2 { font-family: var(--font-display); margin-top: 0; color: var(--char); }
+
+.campo { margin-bottom: 16px; }
+.campo label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; }
+.campo input, .campo select, .campo textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font: inherit;
+  color: var(--ink);
+}
+.campo textarea { resize: vertical; min-height: 70px; }
+
+.form-mensaje {
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 0.88rem;
+  display: none;
+}
+.form-mensaje.error { display: block; background: #fbe4dc; color: var(--tomato); border: 1px solid var(--tomato); }
+.form-mensaje.ok { display: block; background: #e9f0de; color: var(--pickle); border: 1px solid var(--pickle); }
+
+.form-footer { margin-top: 18px; font-size: 0.88rem; color: var(--ink-soft); text-align: center; }
+
+/* ---------- Carrito ---------- */
+.tabla-carrito { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+.tabla-carrito th {
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: none;
+  color: var(--ink-soft);
+  border-bottom: 2px solid var(--char);
+  padding: 8px 6px;
+}
+.tabla-carrito td { padding: 12px 6px; border-bottom: 1px solid var(--line); font-size: 0.92rem; }
+.cant-control { display: flex; align-items: center; gap: 8px; }
+.cant-control button {
+  width: 26px; height: 26px; border: 1px solid var(--char); background: var(--paper); cursor: pointer; font-weight: 700;
+}
+
+.resumen-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: 14px;
+  border-top: 3px solid var(--char);
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+}
+
+/* ---------- Tickets de pedido (cliente / cocina / admin) ---------- */
+.lista-pedidos { display: flex; flex-direction: column; gap: 16px; }
+
+.ticket-pedido {
+  background: #fffaf0;
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--pickle);
+  padding: 18px 20px;
+}
+
+.ticket-pedido.estado-RECIBIDO { border-left-color: var(--mustard); }
+.ticket-pedido.estado-EN_PREPARACION { border-left-color: var(--tomato); }
+.ticket-pedido.estado-LISTO_PARA_ENTREGAR { border-left-color: var(--pickle); }
+.ticket-pedido.estado-ENTREGADO { border-left-color: var(--ink-soft); opacity: 0.75; }
+.ticket-pedido.estado-CANCELADO { border-left-color: var(--ink-soft); opacity: 0.55; text-decoration: line-through; }
+
+.ticket-cabecera {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ticket-cabecera h3 { font-family: var(--font-display); margin: 0; font-size: 1.1rem; }
+
+.badge-estado {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--char);
+  color: var(--paper);
+  height: fit-content;
+}
+
+.ticket-items { margin: 0 0 10px; padding-left: 18px; font-size: 0.88rem; color: var(--ink-soft); }
+.ticket-acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+
+/* ---------- Tabla admin ---------- */
+.tabla-admin { width: 100%; border-collapse: collapse; }
+.tabla-admin th {
+  text-align: left; font-size: 0.75rem; color: var(--ink-soft);
+  border-bottom: 2px solid var(--char); padding: 10px 8px;
+}
+.tabla-admin td { padding: 10px 8px; border-bottom: 1px solid var(--line); font-size: 0.88rem; }
+.tabla-admin tr.inactivo { opacity: 0.5; }
+
+.tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid var(--char); }
+.tab-btn {
+  padding: 10px 18px; border: none; background: none; cursor: pointer;
+  font-weight: 700; font-size: 0.9rem; color: var(--ink-soft);
+  border-bottom: 3px solid transparent; margin-bottom: -2px;
+}
+.tab-btn.activo { color: var(--char); border-bottom-color: var(--tomato); }
+.tab-panel { display: none; }
+.tab-panel.activo { display: block; }
+
+.vacio {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ink-soft);
+  border: 2px dashed var(--line);
+}
+
+footer.site-footer {
+  background: var(--char);
+  color: var(--paper-dim);
+  padding: 24px 0;
+  text-align: center;
+  font-size: 0.82rem;
+}
+
+.oculto { display: none !important; }
+
+@media (max-width: 600px) {
+  .wrap { padding: 0 16px; }
+  nav.main-nav { width: 100%; justify-content: flex-start; }
+}

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tu carrito · BurgerManager</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <header class="top-bar">
+    <div class="wrap">
+      <a th:href="@{/}" class="brand">BURGUER<span>FLOW</span></a>
+      <nav class="main-nav">
+        <a th:href="@{/}">Menú</a>
+        <a th:href="@{/carrito}">Carrito</a>
+        <a th:href="@{/mis-pedidos}" data-rol="CLIENTE" class="oculto">Mis pedidos</a>
+        <a th:href="@{/cocina}" data-rol="EMPLEADO,ADMIN" class="oculto">Cocina</a>
+        <a th:href="@{/admin}" data-rol="ADMIN" class="oculto">Administración</a>
+        <div id="nav-usuario"></div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <h2 class="section-title">Tu carrito</h2>
+      <p class="section-sub">Revisá cantidades antes de confirmar. El monto mínimo para delivery se calcula
+        automáticamente.</p>
+
+      <div id="carrito-vacio" class="vacio oculto">
+        Todavía no agregaste nada. <a href="index.html">Volvé al menú</a> para elegir tus burguers.
+      </div>
+
+      <div id="carrito-contenido">
+        <table class="tabla-carrito">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Precio</th>
+              <th>Cantidad</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="filas-carrito"></tbody>
+        </table>
+
+        <div class="resumen-total">
+          <span>Total</span>
+          <span id="total-carrito">$0</span>
+        </div>
+
+        <div class="form-card" style="margin-top:32px; max-width:520px; margin-left:0;">
+          <h2>Datos de entrega</h2>
+          <div class="form-mensaje" id="mensaje"></div>
+          <form id="form-checkout">
+            <div class="campo">
+              <label for="tipoEntrega">Tipo de entrega</label>
+              <select id="tipoEntrega">
+                <option value="RETIRO">Retiro en local</option>
+                <option value="DELIVERY">Delivery</option>
+              </select>
+            </div>
+            <div class="campo" id="campo-direccion" style="display:none">
+              <label for="direccion">Dirección de entrega</label>
+              <input type="text" id="direccion" placeholder="Calle, número, piso/depto">
+            </div>
+            <div class="campo">
+              <label for="observaciones">Observaciones (opcional)</label>
+              <textarea id="observaciones" placeholder="Sin cebolla, tocar timbre, etc."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%">Confirmar pedido</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">BurgerManager · Trabajo Integrador · Programación en Nuevas Tecnologías I · ORT</footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/carrito.js"></script>
+  <script>
+    function pintarCarrito() {
+      const items = Carrito.obtener();
+      const vacio = document.getElementById('carrito-vacio');
+      const contenido = document.getElementById('carrito-contenido');
+
+      if (items.length === 0) {
+        vacio.classList.remove('oculto');
+        contenido.classList.add('oculto');
+        return;
+      }
+      vacio.classList.add('oculto');
+      contenido.classList.remove('oculto');
+
+      document.getElementById('filas-carrito').innerHTML = items.map(i => `
+    <tr>
+      <td>${escapeHtml(i.nombre)}</td>
+      <td>$${i.precio.toLocaleString('es-AR')}</td>
+      <td>
+        <div class="cant-control">
+          <button data-accion="menos" data-id="${i.productoId}">−</button>
+          <span>${i.cantidad}</span>
+          <button data-accion="mas" data-id="${i.productoId}">+</button>
+        </div>
+      </td>
+      <td>$${(i.precio * i.cantidad).toLocaleString('es-AR')}</td>
+      <td><button class="btn-link" data-accion="quitar" data-id="${i.productoId}" style="color:var(--tomato)">Quitar</button></td>
+    </tr>
+  `).join('');
+
+      document.getElementById('total-carrito').textContent = '$' + Carrito.total().toLocaleString('es-AR');
+
+      document.querySelectorAll('[data-accion]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = Number(btn.dataset.id);
+          const item = Carrito.obtener().find(i => i.productoId === id);
+          if (btn.dataset.accion === 'mas' && item.cantidad < item.stockDisponible) {
+            Carrito.actualizarCantidad(id, item.cantidad + 1);
+          } else if (btn.dataset.accion === 'menos') {
+            Carrito.actualizarCantidad(id, item.cantidad - 1);
+          } else if (btn.dataset.accion === 'quitar') {
+            Carrito.quitar(id);
+          }
+          pintarCarrito();
+        });
+      });
+    }
+
+    document.getElementById('tipoEntrega').addEventListener('change', (e) => {
+      document.getElementById('campo-direccion').style.display = e.target.value === 'DELIVERY' ? 'block' : 'none';
+    });
+
+    document.getElementById('form-checkout').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const mensaje = document.getElementById('mensaje');
+      mensaje.className = 'form-mensaje';
+
+      if (!Api.estaLogueado()) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const items = Carrito.obtener();
+      if (items.length === 0) return;
+
+      const datos = {
+        tipoEntrega: document.getElementById('tipoEntrega').value,
+        direccionEntrega: document.getElementById('direccion').value.trim(),
+        observaciones: document.getElementById('observaciones').value.trim(),
+        items: items.map(i => ({ productoId: i.productoId, cantidad: i.cantidad }))
+      };
+
+      try {
+        await Api.crearPedido(datos);
+        Carrito.vaciar();
+        mensaje.textContent = '¡Pedido confirmado! Podés seguir su estado en "Mis pedidos".';
+        mensaje.className = 'form-mensaje ok';
+        setTimeout(() => { window.location.href = 'mis-pedidos.html'; }, 1200);
+      } catch (err) {
+        mensaje.textContent = err.message;
+        mensaje.className = 'form-mensaje error';
+      }
+    });
+
+    pintarCarrito();
+  </script>
+</body>
+
+</html>

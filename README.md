@@ -66,6 +66,20 @@ Para apagar los contenedores cuando termines de trabajar:
 ```bash
 docker compose down
 ```
+---
+
+## 💻 Ejecución Directa con Maven (Modo Local)
+
+Si querés levantar la aplicación Spring Boot directamente desde tu terminal utilizando el wrapper de Maven:
+
+- **En Linux / macOS:**
+  ```bash
+  ./mvnw spring-boot:run
+  ```
+- **En Windows (CMD / PowerShell):**
+  ```cmd
+  mvnw.cmd spring-boot:run
+  ```
 
 ---
 

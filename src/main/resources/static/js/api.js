@@ -61,18 +61,43 @@ const Api = {
     return await res.json();
   },
 
+  async listarProductos() {
+    const response = await fetch('/api/productos');
+    if (!response.ok) {
+      throw new Error(`Error al obtener productos: ${response.status}`);
+    }
+    return await response.json();
+  },
+
   async registrar(datosUsuario) {
-  const res = await fetch(`${API_BASE}/auth/registro`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(datosUsuario)
-  });
+    const res = await fetch(`${API_BASE}/auth/registro`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(datosUsuario)
+    });
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.mensaje || 'No se pudo completar el registro');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.mensaje || 'No se pudo completar el registro');
+    }
+
+    return await res.json();
+  },
+
+  async crearProducto(producto) {
+    const res = await fetch('/api/productos', { 
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(producto)
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(errorText || 'Error al guardar el producto');
+    }
+
+    return await res.json();
   }
-
-  return await res.json();
-}
 };

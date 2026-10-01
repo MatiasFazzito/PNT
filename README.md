@@ -45,7 +45,7 @@ cd <NOMBRE_DE_LA_CARPETA>
 ### 2. Iniciar el entorno
 Asegurate de tener **Docker Desktop iniciado** y ejecutá:
 ```bash
-docker compose up --build -d
+docker compose up --build
 ```
 *(Si usás una versión antigua de Docker, el comando es `docker-compose up --build -d`).*
 
@@ -70,9 +70,10 @@ docker compose down
 
 ## 💻 Ejecución Directa con Maven (Modo Local)
 
-Si querés levantar la aplicación Spring Boot directamente desde tu terminal utilizando el wrapper de Maven:
+Si querés levantar la aplicación Spring Boot directamente desde tu terminal utilizando el wrapper de Maven: 
+(Considerar que al levantarla en local no habra una base de datos asociada)
 
-- **En Linux / macOS:**
+- **En Linux / macOS / terminal de IDE:**
   ```bash
   ./mvnw spring-boot:run
   ```

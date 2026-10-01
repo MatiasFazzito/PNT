@@ -1,10 +1,16 @@
+function requiereRol(rolRequerido) {
+  const u = Api.usuario();
+    if (!u || !u.rol || u.rol.toUpperCase() !== rolRequerido.toUpperCase()) {
+    window.location.href = '/login';
+  }
+}
+
 function pintarNav() {
   const cont = document.getElementById('nav-usuario');
   if (!cont) return;
 
   const u = Api.usuario();
 
-  // 1. Dibuja estado del usuario manteniendo las clases de estilo
   if (!u) {
     cont.innerHTML = `<a href="/login" class="btn btn-primary btn-sm btn-ingresar">Ingresar</a>`;
   } else {
@@ -19,7 +25,6 @@ function pintarNav() {
     });
   }
 
-  // 2. Control por ROL (Si no hay usuario o el rol no coincide -> oculta)
   document.querySelectorAll('[data-rol]').forEach(el => {
     if (!u || !u.rol) {
       el.classList.add('oculto');
@@ -31,7 +36,6 @@ function pintarNav() {
     el.classList.toggle('oculto', !rolesPermitidos.includes(rolUsuario));
   });
 
-  // 3. Control solo por AUTENTICACIÓN (Ignora elementos que tengan data-rol explícito)
   document.querySelectorAll('[data-autenticado]:not([data-rol])').forEach(el => {
     el.classList.toggle('oculto', !u);
   });

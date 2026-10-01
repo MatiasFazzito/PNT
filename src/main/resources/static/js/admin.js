@@ -14,7 +14,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 async function cargarProductos() {
   const tbody = document.getElementById('filas-productos');
   try {
-    const productos = await Api.listarProductosTodos();
+    const productos = await Api.listarProductos();
     tbody.innerHTML = productos.map(p => `
       <tr class="${p.activo ? '' : 'inactivo'}">
         <td>${escapeHtml(p.nombre)}</td>

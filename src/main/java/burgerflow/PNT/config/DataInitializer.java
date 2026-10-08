@@ -21,9 +21,12 @@ public class DataInitializer {
         return args -> {
             // Inserta productos si la tabla está vacía
             if (productoRepository.count() == 0) {
-                productoRepository.save(new Producto(null, "BurgerFlow Doble Bacon", "Doble carne, cheddar y bacon crocante", 8500.0, 10, "Hamburguesas"));
-                productoRepository.save(new Producto(null, "Papas Cheeseburger", "Papas fritas con cheddar fundido y carne", 4200.0, 15, "Acompañamientos"));
-                productoRepository.save(new Producto(null, "Gaseosa 500ml", "Línea Coca-Cola bien fría", 1800.0, 20, "Bebidas"));
+                productoRepository.save(new Producto(null, "BurgerFlow Doble Bacon",
+                        "Doble carne, cheddar y bacon crocante", 8500.0, 10, "Hamburguesas", "", true));
+                productoRepository.save(new Producto(null, "Papas Cheeseburger",
+                        "Papas fritas con cheddar fundido y carne", 4200.0, 15, "Acompañamientos", "", true));
+                productoRepository.save(new Producto(null, "Gaseosa 500ml", "Línea Coca-Cola bien fría", 1800.0, 20,
+                        "Bebidas", "", true));
             }
 
             // Inserta pedidos si la tabla está vacía

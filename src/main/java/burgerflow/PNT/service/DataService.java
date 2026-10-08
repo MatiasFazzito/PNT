@@ -27,12 +27,8 @@ public class DataService {
         return pedidoRepository.findAll();
     }
 
-    public void agregarProducto(Producto producto) {
-        productoRepository.save(producto);
-    }
-
-    public void guardarProducto(Producto producto) {
-        productoRepository.save(producto);
+    public Producto guardarProducto(Producto producto) {
+        return productoRepository.save(producto);
     }
 
     public Producto getProductoPorId(Long id) {
@@ -41,6 +37,22 @@ public class DataService {
 
     public void eliminarProducto(Long id) {
         productoRepository.deleteById(id);
+    }
+
+    // --- MÉTODOS PARA ACTUALIZACIÓN PARCIAL (PATCH) ---
+
+    public void actualizarStock(Long id, Integer nuevoStock) {
+        productoRepository.findById(id).ifPresent(p -> {
+            p.setStock(nuevoStock);
+            productoRepository.save(p);
+        });
+    }
+
+    public void cambiarEstadoProducto(Long id, Boolean nuevoEstado) {
+        productoRepository.findById(id).ifPresent(p -> {
+            p.setActivo(nuevoEstado);
+            productoRepository.save(p);
+        });
     }
 
     public void cambiarEstadoPedido(Long id, String nuevoEstado) {

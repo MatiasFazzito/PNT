@@ -26,7 +26,11 @@ async function cargarProductos() {
         <td>${p.activo ? 'Activo' : 'Dado de baja'}</td>
         <td style="display:flex;gap:6px">
           <button class="btn btn-outline btn-sm" data-editar="${p.id}">Editar</button>
-          ${p.activo ? `<button class="btn btn-danger btn-sm" data-baja="${p.id}">Dar de baja</button>` : ''}
+          <button class="btn ${p.activo ? 'btn-danger' : 'btn-success'} btn-sm" 
+                  data-toggle-estado="${p.id}" 
+                  data-activo="${p.activo}">
+            ${p.activo ? 'Dar de baja' : 'Activar'}
+          </button>
         </td>
       </tr>
     `).join('');
@@ -49,17 +53,23 @@ async function cargarProductos() {
       });
     });
 
-    tbody.querySelectorAll('[data-baja]').forEach(btn => {
+    tbody.querySelectorAll('[data-toggle-estado]').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (!confirm('¿Dar de baja este producto?')) return;
+        const id = btn.dataset.toggleEstado;
+        const estaActivo = btn.dataset.activo === 'true';
+        const mensaje = estaActivo ? '¿Dar de baja este producto?' : '¿Activar este producto?';
+
+        if (!confirm(mensaje)) return;
+
         try {
-          await Api.eliminarProducto(btn.dataset.baja);
+          await Api.cambiarEstadoProducto(id, !estaActivo);
           cargarProductos();
         } catch (err) {
           alert(err.message);
         }
       });
     });
+
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="6">Error al cargar productos: ${escapeHtml(err.message)}</td></tr>`;
   }
@@ -112,28 +122,47 @@ document.getElementById('form-producto').addEventListener('submit', async (e) =>
   }
 });
 
-// ================= PEDIDOS =================
-async function cargarPedidosAdmin() {
-  const cont = document.getElementById('lista-pedidos-admin');
+async function cargarPedidos() {
+  const contenedor = document.getElementById('lista-pedidos-admin');
+  if (!contenedor) return;
+
   try {
-    const pedidos = await Api.todosLosPedidos();
+    const respuesta = await Api.todosLosPedidos();
+    const pedidos = Array.isArray(respuesta) ? respuesta : [];
+
     if (pedidos.length === 0) {
-      cont.innerHTML = `<p class="vacio">Todavía no hay pedidos registrados.</p>`;
+      contenedor.innerHTML = '<p class="vacio">No hay pedidos registrados.</p>';
       return;
     }
-    cont.innerHTML = pedidos.map(p => `
-      <div class="ticket-pedido estado-${p.estado}">
-        <div class="ticket-cabecera">
-          <h3>Pedido #${p.id} · ${escapeHtml(p.clienteNombre)}</h3>
-          <span class="badge-estado">${etiquetaEstado(p.estado)}</span>
+
+    contenedor.innerHTML = pedidos.map(p => {
+      const id = p.id ?? '-';
+      const cliente = p.clienteEmail || p.cliente || 'Sin cliente';
+      const tipo = p.tipo || p.tipoEntrega || 'Delivery';
+      const total = Number(p.total || 0).toLocaleString('es-AR');
+      const estado = p.estado || 'Pendiente';
+
+      return `
+        <div class="pedido-card" data-id="${id}">
+          <div class="pedido-header">
+            <strong>Pedido #${id}</strong>
+            <span class="badge ${estado.toLowerCase()}">${estado}</span>
+          </div>
+          <div class="pedido-info">
+            <p><strong>Cliente:</strong> ${cliente}</p>
+            <p><strong>Tipo:</strong> ${tipo}</p>
+            <p><strong>Total:</strong> $${total}</p>
+          </div>
+          <div class="pedido-acciones">
+            <button class="btn btn-sm btn-outline" data-pedido-id="${id}">Cambiar Estado</button>
+          </div>
         </div>
-        <ul class="ticket-items">${renderItemsPedido(p.items)}</ul>
-        <p style="font-weight:700">Total: $${Number(p.total).toLocaleString('es-AR')}</p>
-        <p style="font-size:0.78rem;color:var(--ink-soft)">${formatearFecha(p.fechaCreacion)} · ${escapeHtml(p.tipoEntrega)}</p>
-      </div>
-    `).join('');
+      `;
+    }).join('');
+
   } catch (err) {
-    cont.innerHTML = `<p class="vacio">No se pudieron cargar los pedidos (${escapeHtml(err.message)})</p>`;
+    console.error('Error al cargar pedidos:', err);
+    contenedor.innerHTML = `<p class="error">Error al cargar pedidos: ${err.message}</p>`;
   }
 }
 
@@ -186,5 +215,5 @@ async function cargarUsuarios() {
 }
 
 cargarProductos();
-cargarPedidosAdmin();
+cargarPedidos();
 cargarUsuarios();

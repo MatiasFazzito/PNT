@@ -12,12 +12,10 @@ function escapeHtml(str) {
 const API_BASE = '/api';
 
 const Api = {
-  // Guarda los datos del usuario autenticado en localStorage
   guardarSesion(usuario) {
     localStorage.setItem('usuario', JSON.stringify(usuario));
   },
 
-  // Retorna el objeto usuario guardado en la sesión
   usuario() {
     const user = localStorage.getItem('usuario');
     return user ? JSON.parse(user) : null;
@@ -85,7 +83,7 @@ const Api = {
   },
 
   async crearProducto(producto) {
-    const res = await fetch('/api/productos', { 
+    const res = await fetch('/api/productos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -99,5 +97,49 @@ const Api = {
     }
 
     return await res.json();
+  },
+
+  async actualizarProducto(id, producto) {
+    const response = await fetch(`/api/productos/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(producto)
+    });
+    if (!response.ok) throw new Error('Error al actualizar producto');
+    return await response.json();
+  },
+
+  async actualizarStock(id, stock) {
+    const res = await fetch(`/api/productos/${id}/stock`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ stock })
+    });
+    if (!res.ok) throw new Error('Error al actualizar el stock');
+  },
+
+  async cambiarEstadoProducto(id, activo) {
+    const res = await fetch(`/api/productos/${id}/estado`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ activo })
+    });
+    if (!res.ok) throw new Error('Error al cambiar estado del producto');
+  },
+
+  async todosLosPedidos() {
+    const res = await fetch('/api/pedidos');
+    if (!res.ok) throw new Error('Error al obtener la lista de pedidos');
+    return await res.json();
+  },
+
+  // CAMBIAR ESTADO DE UN PEDIDO (Pendiente, En preparación, Entregado, etc.)
+  async cambiarEstadoPedido(id, nuevoEstado) {
+    const res = await fetch(`/api/pedidos/${id}/estado`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ estado: nuevoEstado })
+    });
+    if (!res.ok) throw new Error('Error al actualizar el estado del pedido');
   }
 };

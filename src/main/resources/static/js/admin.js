@@ -146,7 +146,7 @@ async function cargarPedidos() {
         <div class="pedido-card" data-id="${id}">
           <div class="pedido-header">
             <strong>Pedido #${id}</strong>
-            <span class="badge ${estado.toLowerCase()}">${estado}</span>
+            <span class="badge">${estado}</span>
           </div>
           <div class="pedido-info">
             <p><strong>Cliente:</strong> ${cliente}</p>
@@ -154,11 +154,31 @@ async function cargarPedidos() {
             <p><strong>Total:</strong> $${total}</p>
           </div>
           <div class="pedido-acciones">
-            <button class="btn btn-sm btn-outline" data-pedido-id="${id}">Cambiar Estado</button>
+            <button class="btn btn-sm btn-outline btn-cambiar-estado" data-id="${id}" data-estado="${estado}">
+              Cambiar Estado
+            </button>
           </div>
         </div>
       `;
     }).join('');
+
+    contenedor.querySelectorAll('.btn-cambiar-estado').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const estadoActual = btn.dataset.estado;
+
+        const nuevoEstado = prompt(`Estado actual: "${estadoActual}". Ingresá el nuevo estado (ej: Pendiente, En preparación, Entregado, Cancelado):`);
+        
+        if (!nuevoEstado || nuevoEstado.trim() === '') return;
+
+        try {
+          await Api.cambiarEstadoPedido(id, nuevoEstado.trim());
+          cargarPedidos();
+        } catch (err) {
+          alert('Error al actualizar el estado: ' + err.message);
+        }
+      });
+    });
 
   } catch (err) {
     console.error('Error al cargar pedidos:', err);

@@ -2,6 +2,7 @@ package burgerflow.PNT.controller;
 
 import burgerflow.PNT.model.Usuario;
 import burgerflow.PNT.repository.UsuarioRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,34 +21,36 @@ public class AuthRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> credenciales) {
-        String email = credenciales.get("email");
-        String password = credenciales.get("password");
+public ResponseEntity<?> login(@RequestBody Map<String, String> credenciales, HttpSession session) {
+    String email = credenciales.get("email");
+    String password = credenciales.get("password");
 
-        if (email == null || password == null) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("mensaje", "Debe proporcionar email y password"));
-        }
-
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmailAndPassword(email, password);
-
-        if (usuarioOpt.isPresent()) {
-            return ResponseEntity.ok(usuarioOpt.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("mensaje", "Credenciales incorrectas"));
-        }
+    if (email == null || password == null) {
+        return ResponseEntity.badRequest()
+                .body(Map.of("mensaje", "Debe proporcionar email y password"));
     }
+
+    Optional<Usuario> usuarioOpt = usuarioRepository.findByEmailAndPassword(email, password);
+
+    if (usuarioOpt.isPresent()) {
+        Usuario usuario = usuarioOpt.get();
+        
+        session.setAttribute("usuario", usuario);
+
+        return ResponseEntity.ok(usuario);
+    } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("mensaje", "Credenciales incorrectas"));
+    }
+}
 
     @PostMapping("/registro")
     public ResponseEntity<?> registrar(@RequestBody Usuario usuario) {
-        // Validar que el email no esté registrado
         if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("mensaje", "El email ya se encuentra registrado"));
         }
 
-        // Asignar rol CLIENTE por defecto si no viene especificado
         if (usuario.getRol() == null || usuario.getRol().isBlank()) {
             usuario.setRol("CLIENTE");
         }

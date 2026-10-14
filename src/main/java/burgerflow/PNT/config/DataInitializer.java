@@ -35,14 +35,34 @@ public class DataInitializer {
                 pedidoRepository.save(new Pedido(null, "juan@gmail.com", "En preparación", 6000.0, "Retiro"));
             }
 
-            // Inserta usuario Administrador si la tabla está vacía
+            // Inserta usuarios si la tabla está vacía
             if (usuarioRepository.count() == 0) {
+                // 1. Administrador
                 Usuario admin = new Usuario();
                 admin.setNombre("Administrador");
                 admin.setEmail("admin@burgerflow.com");
                 admin.setPassword("admin123");
                 admin.setRol("ADMIN");
+                admin.setActivo(true);
                 usuarioRepository.save(admin);
+
+                // 2. Cliente de prueba
+                Usuario cliente = new Usuario();
+                cliente.setNombre("Juan Pérez");
+                cliente.setEmail("juan.perez@gmail.com");
+                cliente.setPassword("password123");
+                cliente.setRol("CLIENTE");
+                cliente.setActivo(true);
+                usuarioRepository.save(cliente);
+
+                // 3. Empleado / Personal de cocina de prueba
+                Usuario empleado = new Usuario();
+                empleado.setNombre("Carlos Cocina");
+                empleado.setEmail("cocina@burgerflow.com");
+                empleado.setPassword("cocina123");
+                empleado.setRol("EMPLEADO");
+                empleado.setActivo(true);
+                usuarioRepository.save(empleado);
             }
         };
     }

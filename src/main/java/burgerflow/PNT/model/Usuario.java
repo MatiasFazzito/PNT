@@ -14,6 +14,7 @@ public class Usuario {
     private String email;
     private String password;
     private String rol;
+    private Boolean activo = true;
 
     public Usuario() {}
 
@@ -39,4 +40,7 @@ public class Usuario {
 
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
+
+    public Boolean getActivo() { return activo; }
+    public void setActivo(Boolean activo) { this.activo = activo; }
 }

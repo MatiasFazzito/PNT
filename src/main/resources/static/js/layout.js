@@ -1,7 +1,15 @@
-function requiereRol(rolRequerido) {
+function requiereRol(...rolesRequeridos) {
   const u = Api.usuario();
-    if (!u || !u.rol || u.rol.toUpperCase() !== rolRequerido.toUpperCase()) {
+  if (!u || !u.rol) {
     window.location.href = '/login';
+    return;
+  }
+
+  const permitidos = rolesRequeridos.map(r => r.trim().toUpperCase());
+  const rolUsuario = u.rol.toUpperCase();
+
+  if (!permitidos.includes(rolUsuario)) {
+    window.location.href = '/'; 
   }
 }
 

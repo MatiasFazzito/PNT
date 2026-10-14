@@ -133,13 +133,47 @@ const Api = {
     return await res.json();
   },
 
-  // CAMBIAR ESTADO DE UN PEDIDO (Pendiente, En preparación, Entregado, etc.)
-  async cambiarEstadoPedido(id, nuevoEstado) {
-    const res = await fetch(`/api/pedidos/${id}/estado`, {
+  async listarUsuarios() {
+    const res = await fetch('/api/usuarios');
+    if (!res.ok) throw new Error('Error al listar usuarios');
+    return await res.json();
+  },
+
+  async darDeBajaUsuario(id) {
+    const res = await fetch(`/api/usuarios/${id}/estado`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ estado: nuevoEstado })
+      headers: { 'Content-Type': 'application/json' }
     });
-    if (!res.ok) throw new Error('Error al actualizar el estado del pedido');
+    if (!res.ok) throw new Error('Error al cambiar el estado del usuario');
+  },
+
+  async pedidosCocina() {
+    try {
+      const response = await fetch('/api/pedidos');
+      if (!response.ok) {
+        console.error("Error al obtener los pedidos:", response.status);
+        return [];
+      }
+      const data = await response.json();
+
+      return Array.isArray(data) ? data : [];
+    } catch (error) {
+      console.error("Error de red en pedidosCocina:", error);
+      return [];
+    }
+  },
+
+  async cambiarEstadoPedido(id, estado) {
+    try {
+      const response = await fetch(`/api/pedidos/${id}/estado`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ estado })
+      });
+      return response.ok;
+    } catch (error) {
+      console.error("Error al cambiar estado:", error);
+      return false;
+    }
   }
 };

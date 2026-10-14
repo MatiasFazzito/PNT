@@ -16,16 +16,19 @@ async function cargarPedidosCocina() {
     }
     cont.innerHTML = pedidos.map(p => {
       const siguiente = SIGUIENTE_ESTADO[p.estado];
+      const items = Array.isArray(p.items) ? p.items : [];
+      const nombreCliente = p.clienteNombre || p.clienteEmail || 'Cliente';
+
       return `
       <div class="ticket-pedido estado-${p.estado}">
         <div class="ticket-cabecera">
-          <h3>Pedido #${p.id} · ${escapeHtml(p.clienteNombre)}</h3>
-          <span class="badge-estado">${etiquetaEstado(p.estado)}</span>
+          <h3>Pedido #${p.id} · ${escapeHtml(nombreCliente)}</h3>
+          <span class="badge-estado">${etiquetaEstado ? etiquetaEstado(p.estado) : p.estado}</span>
         </div>
         <p style="font-size:0.85rem;color:var(--ink-soft)">${p.tipoEntrega === 'DELIVERY' ? 'Delivery a ' + escapeHtml(p.direccionEntrega || 's/d') : 'Retiro en local'}</p>
-        <ul class="ticket-items">${renderItemsPedido(p.items)}</ul>
+        <ul class="ticket-items">${items.length > 0 ? items.map(item => `<li>${item.cantidad}x${escapeHtml(item.productoNombre)}</li>`).join('') : '<li>Sin detalles de ítems</li>'}</ul>
         ${p.observaciones ? `<p style="font-size:0.85rem;color:var(--ink-soft)">Obs: ${escapeHtml(p.observaciones)}</p>` : ''}
-        <p style="font-size:0.78rem;color:var(--ink-soft)">Pedido a las ${formatearFecha(p.fechaCreacion)}</p>
+        <p style="font-size:0.78rem;color:var(--ink-soft)">Pedido ${p.fechaCreacion ? 'a las ' + formatearFecha(p.fechaCreacion) : ''}</p>
         <div class="ticket-acciones">
           ${siguiente ? `<button class="btn btn-secondary btn-sm" data-id="${p.id}" data-estado="${siguiente.estado}">${siguiente.etiqueta}</button>` : ''}
           <button class="btn btn-danger btn-sm" data-id="${p.id}" data-estado="CANCELADO">Cancelar (sin insumos)</button>

@@ -2,8 +2,10 @@ package burgerflow.PNT.service;
 
 import burgerflow.PNT.model.Pedido;
 import burgerflow.PNT.model.Producto;
+import burgerflow.PNT.model.Usuario;
 import burgerflow.PNT.repository.PedidoRepository;
 import burgerflow.PNT.repository.ProductoRepository;
+import burgerflow.PNT.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +15,14 @@ public class DataService {
 
     private final ProductoRepository productoRepository;
     private final PedidoRepository pedidoRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public DataService(ProductoRepository productoRepository, PedidoRepository pedidoRepository) {
+    public DataService(ProductoRepository productoRepository,
+            PedidoRepository pedidoRepository,
+            UsuarioRepository usuarioRepository) {
         this.productoRepository = productoRepository;
         this.pedidoRepository = pedidoRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public List<Producto> getProductos() {
@@ -25,6 +31,17 @@ public class DataService {
 
     public List<Pedido> getPedidos() {
         return pedidoRepository.findAll();
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarioRepository.findAll();
+    }
+
+    public void cambiarEstadoUsuario(Long id) {
+        usuarioRepository.findById(id).ifPresent(u -> {
+            u.setActivo(u.getActivo() == null ? false : !u.getActivo());
+            usuarioRepository.save(u);
+        });
     }
 
     public Producto guardarProducto(Producto producto) {
@@ -38,8 +55,6 @@ public class DataService {
     public void eliminarProducto(Long id) {
         productoRepository.deleteById(id);
     }
-
-    // --- MÉTODOS PARA ACTUALIZACIÓN PARCIAL (PATCH) ---
 
     public void actualizarStock(Long id, Integer nuevoStock) {
         productoRepository.findById(id).ifPresent(p -> {

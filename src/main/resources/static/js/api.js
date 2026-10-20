@@ -127,6 +127,25 @@ const Api = {
     if (!res.ok) throw new Error('Error al cambiar estado del producto');
   },
 
+  async crearPedido(datos) {
+    const res = await fetch('/api/pedidos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(datos)
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.mensaje || 'No se pudo crear el pedido');
+    }
+    return await res.json();
+  },
+
+  async misPedidos() {
+    const res = await fetch('/api/pedidos/mis-pedidos');
+    if (!res.ok) throw new Error('Error al obtener tus pedidos');
+    return await res.json();
+  },
+
   async todosLosPedidos() {
     const res = await fetch('/api/pedidos');
     if (!res.ok) throw new Error('Error al obtener la lista de pedidos');
@@ -149,7 +168,7 @@ const Api = {
 
   async pedidosCocina() {
     try {
-      const response = await fetch('/api/pedidos');
+      const response = await fetch('/api/pedidos/activos');
       if (!response.ok) {
         console.error("Error al obtener los pedidos:", response.status);
         return [];
@@ -164,16 +183,15 @@ const Api = {
   },
 
   async cambiarEstadoPedido(id, estado) {
-    try {
-      const response = await fetch(`/api/pedidos/${id}/estado`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ estado })
-      });
-      return response.ok;
-    } catch (error) {
-      console.error("Error al cambiar estado:", error);
-      return false;
+    const response = await fetch(`/api/pedidos/${id}/estado`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ estado })
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.mensaje || 'No se pudo cambiar el estado del pedido');
     }
+    return await response.json();
   }
 };

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Administración · BurgerManager</title>
+  <title>Administración · BurgerFlow</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -89,8 +89,11 @@
         <input type="hidden" id="p-id">
         <div class="campo"><label>Nombre</label><input type="text" id="p-nombre" required></div>
         <div class="campo"><label>Descripción</label><textarea id="p-descripcion"></textarea></div>
-        <div class="campo"><label>Categoría</label><input type="text" id="p-categoria" required
-            placeholder="HAMBURGUESAS, BEBIDAS, ACOMPANIAMIENTOS, POSTRES..."></div>
+        <div class="campo"><label>Categoría</label>
+          <select id="p-categoria" required></select>
+          <input type="text" id="p-categoria-nueva" class="oculto" style="margin-top:8px"
+            placeholder="Nombre de la nueva categoría">
+        </div>
         <div class="campo"><label>Precio</label><input type="number" step="0.01" min="0.01" id="p-precio" required>
         </div>
         <div class="campo"><label>Stock</label><input type="number" step="1" min="0" id="p-stock" required></div>
@@ -103,7 +106,7 @@
     </div>
   </div>
 
-  <footer class="site-footer">BurgerManager · Trabajo Integrador · Programación en Nuevas Tecnologías I · ORT</footer>
+  <footer class="site-footer">BurgerFlow · Trabajo Integrador · Programación en Nuevas Tecnologías I · ORT</footer>
 
   <script src="js/api.js"></script>
   <script src="js/layout.js"></script>

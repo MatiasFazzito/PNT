@@ -6,6 +6,25 @@ const ETIQUETAS_ESTADO = {
   CANCELADO: 'Cancelado'
 };
 
+// Espejo de EstadoPedido.siguientesPermitidos() del backend
+const TRANSICIONES_ESTADO = {
+  RECIBIDO: ['EN_PREPARACION', 'CANCELADO'],
+  EN_PREPARACION: ['LISTO_PARA_ENTREGAR', 'CANCELADO'],
+  LISTO_PARA_ENTREGAR: ['ENTREGADO', 'CANCELADO'],
+  ENTREGADO: [],
+  CANCELADO: []
+};
+
+const ETIQUETAS_ENTREGA = {
+  DELIVERY: 'Delivery',
+  RETIRO: 'Retiro en local',
+  MOSTRADOR: 'Consumo en mostrador'
+};
+
+function etiquetaEntrega(tipo) {
+  return ETIQUETAS_ENTREGA[tipo] || tipo;
+}
+
 function etiquetaEstado(estado) {
   return ETIQUETAS_ESTADO[estado] || estado;
 }

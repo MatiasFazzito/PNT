@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tu carrito · BurgerManager</title>
+  <title>Tu carrito · BurgerFlow</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -57,6 +57,10 @@
           <h2>Datos de entrega</h2>
           <div class="form-mensaje" id="mensaje"></div>
           <form id="form-checkout">
+            <div class="campo" id="campo-cliente" style="display:none">
+              <label for="clienteNombre">Nombre del cliente</label>
+              <input type="text" id="clienteNombre" maxlength="100" placeholder="Nombre de quien hace el pedido">
+            </div>
             <div class="campo">
               <label for="tipoEntrega">Tipo de entrega</label>
               <select id="tipoEntrega">
@@ -72,14 +76,14 @@
               <label for="observaciones">Observaciones (opcional)</label>
               <textarea id="observaciones" placeholder="Sin cebolla, tocar timbre, etc."></textarea>
             </div>
-            <button type="submit" class="btn btn-primary" style="width:100%">Confirmar pedido</button>
+            <button type="submit" id="btn-confirmar" class="btn btn-primary" style="width:100%">Confirmar pedido</button>
           </form>
         </div>
       </div>
     </div>
   </main>
 
-  <footer class="site-footer">BurgerManager · Trabajo Integrador · Programación en Nuevas Tecnologías I · ORT</footer>
+  <footer class="site-footer">BurgerFlow · Trabajo Integrador · Programación en Nuevas Tecnologías I · ORT</footer>
 
   <script src="js/api.js"></script>
   <script src="js/layout.js"></script>
@@ -132,6 +136,16 @@
       });
     }
 
+    // Personal (ADMIN/EMPLEADO): carga el pedido a nombre de un cliente (mostrador/teléfono)
+    const esPersonal = Api.tieneRol('ADMIN', 'EMPLEADO');
+    if (esPersonal) {
+      document.getElementById('campo-cliente').style.display = 'block';
+      const selectEntrega = document.getElementById('tipoEntrega');
+      selectEntrega.insertBefore(new Option('Consumo en mostrador', 'MOSTRADOR'), selectEntrega.firstChild);
+      selectEntrega.value = 'MOSTRADOR';
+      document.getElementById('btn-confirmar').textContent = 'Cargar pedido';
+    }
+
     document.getElementById('tipoEntrega').addEventListener('change', (e) => {
       document.getElementById('campo-direccion').style.display = e.target.value === 'DELIVERY' ? 'block' : 'none';
     });
@@ -156,12 +170,24 @@
         items: items.map(i => ({ productoId: i.productoId, cantidad: i.cantidad }))
       };
 
+      if (esPersonal) {
+        const nombre = document.getElementById('clienteNombre').value.trim();
+        if (!nombre) {
+          mensaje.textContent = 'Ingresá el nombre del cliente';
+          mensaje.className = 'form-mensaje error';
+          return;
+        }
+        datos.clienteNombre = nombre;
+      }
+
       try {
         await Api.crearPedido(datos);
         Carrito.vaciar();
-        mensaje.textContent = '¡Pedido confirmado! Podés seguir su estado en "Mis pedidos".';
+        mensaje.textContent = esPersonal
+          ? '¡Pedido cargado! Lo ves en la cola de cocina.'
+          : '¡Pedido confirmado! Podés seguir su estado en "Mis pedidos".';
         mensaje.className = 'form-mensaje ok';
-        setTimeout(() => { window.location.href = 'mis-pedidos.html'; }, 1200);
+        setTimeout(() => { window.location.href = esPersonal ? '/cocina' : 'mis-pedidos.html'; }, 1200);
       } catch (err) {
         mensaje.textContent = err.message;
         mensaje.className = 'form-mensaje error';

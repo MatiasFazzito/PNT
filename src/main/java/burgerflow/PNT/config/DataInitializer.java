@@ -1,5 +1,6 @@
 package burgerflow.PNT.config;
 
+import burgerflow.PNT.model.EstadoPedido;
 import burgerflow.PNT.model.Pedido;
 import burgerflow.PNT.model.Producto;
 import burgerflow.PNT.model.Usuario;
@@ -31,8 +32,8 @@ public class DataInitializer {
 
             // Inserta pedidos si la tabla está vacía
             if (pedidoRepository.count() == 0) {
-                pedidoRepository.save(new Pedido(null, "cliente@ort.edu.ar", "Pendiente", 12700.0, "Delivery"));
-                pedidoRepository.save(new Pedido(null, "juan@gmail.com", "En preparación", 6000.0, "Retiro"));
+                pedidoRepository.save(new Pedido(null, "cliente@ort.edu.ar", EstadoPedido.RECIBIDO, 12700.0, "DELIVERY"));
+                pedidoRepository.save(new Pedido(null, "juan@gmail.com", EstadoPedido.EN_PREPARACION, 6000.0, "RETIRO"));
             }
 
             // Inserta usuarios si la tabla está vacía
@@ -50,7 +51,7 @@ public class DataInitializer {
                 Usuario cliente = new Usuario();
                 cliente.setNombre("Juan Pérez");
                 cliente.setEmail("juan.perez@gmail.com");
-                cliente.setPassword("password123");
+                cliente.setPassword("Juan123");
                 cliente.setRol("CLIENTE");
                 cliente.setActivo(true);
                 usuarioRepository.save(cliente);

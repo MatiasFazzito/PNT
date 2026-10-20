@@ -70,10 +70,4 @@ public class DataService {
         });
     }
 
-    public void cambiarEstadoPedido(Long id, String nuevoEstado) {
-        pedidoRepository.findById(id).ifPresent(p -> {
-            p.setEstado(nuevoEstado);
-            pedidoRepository.save(p);
-        });
-    }
 }

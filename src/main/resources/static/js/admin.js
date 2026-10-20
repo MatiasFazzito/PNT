@@ -11,10 +11,65 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 
 // ================= PRODUCTOS =================
+
+// Categorías que ya existen (salen de los productos cargados). Se usan en el desplegable del formulario.
+let CATEGORIAS = [];
+const NUEVA_CATEGORIA = '__nueva__';
+
+// Unificar nombres para que cuenten como la misma categoría
+function normalizarCategoria(texto) {
+  return (texto || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+}
+
+function categoriasUnicas(productos) {
+  const vistas = new Map();
+  productos.forEach(p => {
+    const clave = normalizarCategoria(p.categoria);
+    if (clave && !vistas.has(clave)) vistas.set(clave, p.categoria.trim());
+  });
+  return [...vistas.values()].sort((a, b) => a.localeCompare(b, 'es'));
+}
+
+function poblarSelectCategorias(seleccionada) {
+  const select = document.getElementById('p-categoria');
+  select.innerHTML = '';
+  select.add(new Option('Seleccioná una categoría', ''));
+  CATEGORIAS.forEach(c => select.add(new Option(c, c)));
+  select.add(new Option('+ Agregar Categoria', NUEVA_CATEGORIA));
+
+  if (seleccionada) {
+    const existente = CATEGORIAS.find(c => normalizarCategoria(c) === normalizarCategoria(seleccionada));
+    select.value = existente ?? NUEVA_CATEGORIA;
+    if (!existente) document.getElementById('p-categoria-nueva').value = seleccionada;
+  }
+  actualizarCampoCategoriaNueva();
+}
+
+// Muestra el campo de texto solo cuando se elige "Nueva categoria"
+function actualizarCampoCategoriaNueva() {
+  const esNueva = document.getElementById('p-categoria').value === NUEVA_CATEGORIA;
+  const input = document.getElementById('p-categoria-nueva');
+  input.classList.toggle('oculto', !esNueva);
+  input.required = esNueva;
+}
+
+// Devuelve la categoría elegida. Si escribieron una "nueva" que en realidad ya existe, usa la existente (así no se crean solapas duplicadas).
+function categoriaElegida() {
+  const select = document.getElementById('p-categoria');
+  if (select.value !== NUEVA_CATEGORIA) return select.value;
+
+  const escrita = document.getElementById('p-categoria-nueva').value.trim();
+  const existente = CATEGORIAS.find(c => normalizarCategoria(c) === normalizarCategoria(escrita));
+  return existente ?? escrita;
+}
+
+document.getElementById('p-categoria').addEventListener('change', actualizarCampoCategoriaNueva);
+
 async function cargarProductos() {
   const tbody = document.getElementById('filas-productos');
   try {
     const productos = await Api.listarProductos();
+    CATEGORIAS = categoriasUnicas(productos);
     tbody.innerHTML = productos.map(p => `
       <tr class="${p.activo ? '' : 'inactivo'}">
         <td>${escapeHtml(p.nombre)}</td>
@@ -81,10 +136,11 @@ function abrirModalProducto(producto) {
   document.getElementById('p-id').value = producto ? producto.id : '';
   document.getElementById('p-nombre').value = producto ? producto.nombre : '';
   document.getElementById('p-descripcion').value = producto ? (producto.descripcion || '') : '';
-  document.getElementById('p-categoria').value = producto ? producto.categoria : '';
+  document.getElementById('p-categoria-nueva').value = '';
+  poblarSelectCategorias(producto ? producto.categoria : '');
   document.getElementById('p-precio').value = producto ? producto.precio : '';
   document.getElementById('p-stock').value = producto ? producto.stock : '';
-  document.getElementById('p-imagen').value = producto ? (producto.imagenUrl || '') : '';
+  document.getElementById('p-imagen').value = producto ? (producto.imagen || '') : '';
   document.getElementById('modal-producto').classList.remove('oculto');
 }
 
@@ -102,10 +158,10 @@ document.getElementById('form-producto').addEventListener('submit', async (e) =>
   const datos = {
     nombre: document.getElementById('p-nombre').value.trim(),
     descripcion: document.getElementById('p-descripcion').value.trim(),
-    categoria: document.getElementById('p-categoria').value.trim(),
+    categoria: categoriaElegida(),
     precio: Number(document.getElementById('p-precio').value),
     stock: Number(document.getElementById('p-stock').value),
-    imagenUrl: document.getElementById('p-imagen').value.trim()
+    imagen: document.getElementById('p-imagen').value.trim()
   };
 
   try {
@@ -122,6 +178,7 @@ document.getElementById('form-producto').addEventListener('submit', async (e) =>
   }
 });
 
+// ================= PEDIDOS =================
 async function cargarPedidos() {
   const contenedor = document.getElementById('lista-pedidos-admin');
   if (!contenedor) return;
@@ -137,26 +194,33 @@ async function cargarPedidos() {
 
     contenedor.innerHTML = pedidos.map(p => {
       const id = p.id ?? '-';
-      const cliente = p.clienteEmail || p.cliente || 'Sin cliente';
+      const cliente = p.clienteNombre
+        ? (p.clienteEmail ? `${p.clienteNombre} (${p.clienteEmail})` : p.clienteNombre)
+        : (p.clienteEmail || p.cliente || 'Sin cliente');
       const tipo = p.tipo || p.tipoEntrega || 'Delivery';
       const total = Number(p.total || 0).toLocaleString('es-AR');
-      const estado = p.estado || 'Pendiente';
+      const estado = p.estado || 'RECIBIDO';
+      const siguientes = TRANSICIONES_ESTADO[estado] || [];
 
       return `
         <div class="pedido-card" data-id="${id}">
           <div class="pedido-header">
             <strong>Pedido #${id}</strong>
-            <span class="badge">${estado}</span>
+            <span class="badge">${etiquetaEstado(estado)}</span>
           </div>
           <div class="pedido-info">
-            <p><strong>Cliente:</strong> ${cliente}</p>
-            <p><strong>Tipo:</strong> ${tipo}</p>
+            <p><strong>Cliente:</strong> ${escapeHtml(cliente)}</p>
+            <p><strong>Tipo:</strong> ${escapeHtml(etiquetaEntrega(tipo))}</p>
+            ${p.cargadoPor ? `<p><strong>Cargado por:</strong> ${escapeHtml(p.cargadoPor)}</p>` : ''}
             <p><strong>Total:</strong> $${total}</p>
           </div>
           <div class="pedido-acciones">
-            <button class="btn btn-sm btn-outline btn-cambiar-estado" data-id="${id}" data-estado="${estado}">
-              Cambiar Estado
-            </button>
+            ${siguientes.length > 0 ? `
+              <select class="select-estado" data-id="${id}">
+                ${siguientes.map(e => `<option value="${e}">${etiquetaEstado(e)}</option>`).join('')}
+              </select>
+              <button class="btn btn-sm btn-outline btn-cambiar-estado" data-id="${id}">Cambiar estado</button>
+            ` : '<em>Pedido finalizado</em>'}
           </div>
         </div>
       `;
@@ -165,17 +229,16 @@ async function cargarPedidos() {
     contenedor.querySelectorAll('.btn-cambiar-estado').forEach(btn => {
       btn.addEventListener('click', async () => {
         const id = btn.dataset.id;
-        const estadoActual = btn.dataset.estado;
+        const select = contenedor.querySelector(`.select-estado[data-id="${id}"]`);
+        if (!select) return;
 
-        const nuevoEstado = prompt(`Estado actual: "${estadoActual}". Ingresá el nuevo estado (ej: Pendiente, En preparación, Entregado, Cancelado):`);
-        
-        if (!nuevoEstado || nuevoEstado.trim() === '') return;
-
+        btn.disabled = true;
         try {
-          await Api.cambiarEstadoPedido(id, nuevoEstado.trim());
+          await Api.cambiarEstadoPedido(id, select.value);
           cargarPedidos();
         } catch (err) {
           alert('Error al actualizar el estado: ' + err.message);
+          btn.disabled = false;
         }
       });
     });

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import burgerflow.PNT.model.Producto;
@@ -17,12 +16,6 @@ public class MenuController {
 
     public MenuController(DataService dataService) {
         this.dataService = dataService;
-    }
-
-    @GetMapping("/menu")
-    public String verMenu(Model model) {
-        model.addAttribute("productos", dataService.getProductos());
-        return "menu";
     }
 
     // LISTAR

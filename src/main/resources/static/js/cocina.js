@@ -25,7 +25,7 @@ async function cargarPedidosCocina() {
           <h3>Pedido #${p.id} · ${escapeHtml(nombreCliente)}</h3>
           <span class="badge-estado">${etiquetaEstado ? etiquetaEstado(p.estado) : p.estado}</span>
         </div>
-        <p style="font-size:0.85rem;color:var(--ink-soft)">${p.tipoEntrega === 'DELIVERY' ? 'Delivery a ' + escapeHtml(p.direccionEntrega || 's/d') : 'Retiro en local'}</p>
+        <p style="font-size:0.85rem;color:var(--ink-soft)">${p.tipoEntrega === 'DELIVERY' ? 'Delivery a ' + escapeHtml(p.direccionEntrega || 's/d') : etiquetaEntrega(p.tipoEntrega)}</p>
         <ul class="ticket-items">${items.length > 0 ? items.map(item => `<li>${item.cantidad}x${escapeHtml(item.productoNombre)}</li>`).join('') : '<li>Sin detalles de ítems</li>'}</ul>
         ${p.observaciones ? `<p style="font-size:0.85rem;color:var(--ink-soft)">Obs: ${escapeHtml(p.observaciones)}</p>` : ''}
         <p style="font-size:0.78rem;color:var(--ink-soft)">Pedido ${p.fechaCreacion ? 'a las ' + formatearFecha(p.fechaCreacion) : ''}</p>

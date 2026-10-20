@@ -11,7 +11,7 @@ async function cargarMisPedidos() {
     cont.innerHTML = pedidos.map(p => `
       <div class="ticket-pedido estado-${p.estado}">
         <div class="ticket-cabecera">
-          <h3>Pedido #${p.id} · ${p.tipoEntrega === 'DELIVERY' ? 'Delivery' : 'Retiro en local'}</h3>
+          <h3>Pedido #${p.id} · ${etiquetaEntrega(p.tipoEntrega)}</h3>
           <span class="badge-estado">${etiquetaEstado(p.estado)}</span>
         </div>
         <ul class="ticket-items">${renderItemsPedido(p.items)}</ul>

@@ -1,7 +1,9 @@
 package burgerflow.PNT.controller;
 
+import burgerflow.PNT.model.EstadoPedido;
 import burgerflow.PNT.model.Usuario;
 import burgerflow.PNT.service.DataService;
+import burgerflow.PNT.service.PedidoService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 public class KitchenController {
 
     private final DataService dataService;
+    private final PedidoService pedidoService;
 
-    public KitchenController(DataService dataService) {
+    public KitchenController(DataService dataService, PedidoService pedidoService) {
         this.dataService = dataService;
+        this.pedidoService = pedidoService;
     }
 
     @GetMapping
@@ -54,7 +58,11 @@ public class KitchenController {
             return "redirect:/";
         }
 
-        dataService.cambiarEstadoPedido(id, estado);
+        try {
+            pedidoService.cambiarEstado(id, EstadoPedido.desdeTexto(estado));
+        } catch (RuntimeException e) {
+            System.out.println("No se pudo cambiar el estado del pedido " + id + ": " + e.getMessage());
+        }
         return "redirect:/cocina";
     }
 }

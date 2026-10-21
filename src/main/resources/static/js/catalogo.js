@@ -46,6 +46,7 @@ function pintarGrid() {
 
   grid.innerHTML = lista.map(p => `
     <article class="card-producto ${p.stock === 0 ? 'sin-stock' : ''}">
+      ${p.imagen ? `<img class="producto-img" src="${escapeHtml(p.imagen)}" alt="${escapeHtml(p.nombre)}" loading="lazy">` : ''}
       <span class="categoria">${escapeHtml(formatearCategoria(p.categoria))}</span>
       <h3>${escapeHtml(p.nombre)}</h3>
       <p>${escapeHtml(p.descripcion)}</p>

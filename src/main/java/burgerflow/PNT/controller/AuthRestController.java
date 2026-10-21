@@ -45,7 +45,7 @@ public class AuthRestController {
     }
 
     @PostMapping("/registro")
-    public ResponseEntity<?> registrar(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> registrar(@RequestBody Usuario usuario, HttpSession session) {
         if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("mensaje", "El email ya se encuentra registrado"));
@@ -56,6 +56,10 @@ public class AuthRestController {
         }
 
         Usuario nuevoUsuario = usuarioRepository.save(usuario);
+
+        // Queda logueado también en el servidor (igual que en el login)
+        session.setAttribute("usuario", nuevoUsuario);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
     }
 }

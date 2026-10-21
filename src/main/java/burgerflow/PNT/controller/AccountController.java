@@ -16,13 +16,13 @@ public class AccountController {
         return "registro";
     }
 
-    // ✅ Mapeo para Mis Pedidos
+    // Mapeo para Mis Pedidos
     @GetMapping({"/mis-pedidos", "/mis-pedidos.html"})
     public String misPedidos() {
         return "mis-pedidos"; // Devuelve templates/mis-pedidos.html
     }
 
-    // ✅ Mapeo para el Panel de Administración
+    // Mapeo para el Panel de Administración
     @GetMapping({"/admin", "/admin.html"})
     public String admin() {
         return "admin"; // Devuelve templates/admin.html

@@ -23,12 +23,9 @@ public class KitchenController {
 
     @GetMapping
     public String verCocina(HttpSession session, Model model) {
-        System.out.println("--- ACCEDIENDO A /cocina ---");
-        System.out.println("Usuario en sesión: " + session.getAttribute("usuario"));
 
         Object objUsuario = session.getAttribute("usuario");
         if (objUsuario == null) {
-            System.out.println("Redirigiendo a /login porque la sesión es nula.");
             return "redirect:/login";
         }
 

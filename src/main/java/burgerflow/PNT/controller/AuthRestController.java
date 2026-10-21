@@ -21,28 +21,28 @@ public class AuthRestController {
     }
 
     @PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody Map<String, String> credenciales, HttpSession session) {
-    String email = credenciales.get("email");
-    String password = credenciales.get("password");
+    public ResponseEntity<?> login(@RequestBody Map<String, String> credenciales, HttpSession session) {
+        String email = credenciales.get("email");
+        String password = credenciales.get("password");
 
-    if (email == null || password == null) {
-        return ResponseEntity.badRequest()
-                .body(Map.of("mensaje", "Debe proporcionar email y password"));
+        if (email == null || password == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("mensaje", "Debe proporcionar email y password"));
+        }
+
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmailAndPassword(email, password);
+
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+
+            session.setAttribute("usuario", usuario);
+
+            return ResponseEntity.ok(usuario);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("mensaje", "Credenciales incorrectas"));
+        }
     }
-
-    Optional<Usuario> usuarioOpt = usuarioRepository.findByEmailAndPassword(email, password);
-
-    if (usuarioOpt.isPresent()) {
-        Usuario usuario = usuarioOpt.get();
-        
-        session.setAttribute("usuario", usuario);
-
-        return ResponseEntity.ok(usuario);
-    } else {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("mensaje", "Credenciales incorrectas"));
-    }
-}
 
     @PostMapping("/registro")
     public ResponseEntity<?> registrar(@RequestBody Usuario usuario) {

@@ -12,22 +12,13 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 // ================= PRODUCTOS =================
 
-// Categorías que ya existen (salen de los productos cargados). Se usan en el desplegable del formulario.
-let CATEGORIAS = [];
+// Categorías inicializadas únicamente con las tres requeridas. Se pueden agregar más dinámicamente.
+let CATEGORIAS = ['Hamburguesa', 'Acompañamiento', 'Bebida'];
 const NUEVA_CATEGORIA = '__nueva__';
 
-// Unificar nombres para que cuenten como la misma categoría
+// Unificar nombres para que cuenten como la misma categoría (evita duplicados por mayúsculas/minúsculas o tildes)
 function normalizarCategoria(texto) {
   return (texto || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
-}
-
-function categoriasUnicas(productos) {
-  const vistas = new Map();
-  productos.forEach(p => {
-    const clave = normalizarCategoria(p.categoria);
-    if (clave && !vistas.has(clave)) vistas.set(clave, p.categoria.trim());
-  });
-  return [...vistas.values()].sort((a, b) => a.localeCompare(b, 'es'));
 }
 
 function poblarSelectCategorias(seleccionada) {
@@ -39,8 +30,14 @@ function poblarSelectCategorias(seleccionada) {
 
   if (seleccionada) {
     const existente = CATEGORIAS.find(c => normalizarCategoria(c) === normalizarCategoria(seleccionada));
-    select.value = existente ?? NUEVA_CATEGORIA;
-    if (!existente) document.getElementById('p-categoria-nueva').value = seleccionada;
+    if (existente) {
+      select.value = existente;
+    } else {
+      CATEGORIAS.push(seleccionada);
+      CATEGORIAS.sort((a, b) => a.localeCompare(b, 'es'));
+      poblarSelectCategorias(seleccionada);
+      return;
+    }
   }
   actualizarCampoCategoriaNueva();
 }
@@ -53,14 +50,22 @@ function actualizarCampoCategoriaNueva() {
   input.required = esNueva;
 }
 
-// Devuelve la categoría elegida. Si escribieron una "nueva" que en realidad ya existe, usa la existente (así no se crean solapas duplicadas).
+// Devuelve la categoría elegida. Si escribieron una nueva, valida que no exista (evita duplicados) y la agrega.
 function categoriaElegida() {
   const select = document.getElementById('p-categoria');
   if (select.value !== NUEVA_CATEGORIA) return select.value;
 
   const escrita = document.getElementById('p-categoria-nueva').value.trim();
+  if (!escrita) return '';
+
+  // Verificar si ya existe en la lista (ignorando mayúsculas y acentos) para evitar duplicados
   const existente = CATEGORIAS.find(c => normalizarCategoria(c) === normalizarCategoria(escrita));
-  return existente ?? escrita;
+  if (existente) return existente;
+
+  // Si es totalmente nueva, la agregamos a la lista en memoria y la ordenamos alfabéticamente
+  CATEGORIAS.push(escrita);
+  CATEGORIAS.sort((a, b) => a.localeCompare(b, 'es'));
+  return escrita;
 }
 
 document.getElementById('p-categoria').addEventListener('change', actualizarCampoCategoriaNueva);
@@ -69,7 +74,7 @@ async function cargarProductos() {
   const tbody = document.getElementById('filas-productos');
   try {
     const productos = await Api.listarProductos();
-    CATEGORIAS = categoriasUnicas(productos);
+    
     tbody.innerHTML = productos.map(p => `
       <tr class="${p.activo ? '' : 'inactivo'}">
         <td>${escapeHtml(p.nombre)}</td>

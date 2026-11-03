@@ -11,7 +11,7 @@ function requiereRol(...rolesRequeridos) {
   const rolUsuario = u.rol.toUpperCase();
 
   if (!permitidos.includes(rolUsuario)) {
-    window.location.href = '/'; 
+    window.location.href = '/';
   }
 }
 

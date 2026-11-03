@@ -3,7 +3,8 @@ package burgerflow.PNT.dto;
 import java.util.List;
 
 /**
- * Cuerpo del POST /api/pedidos. El total NO viene del cliente: lo calcula el servidor.
+ * Cuerpo del POST /api/pedidos. El total NO viene del cliente: lo calcula el
+ * servidor.
  */
 public record PedidoRequest(
         String tipoEntrega,
@@ -12,5 +13,6 @@ public record PedidoRequest(
         String clienteNombre,
         List<ItemRequest> items) {
 
-    public record ItemRequest(Long productoId, Integer cantidad) {}
+    public record ItemRequest(Long productoId, Integer cantidad) {
+    }
 }

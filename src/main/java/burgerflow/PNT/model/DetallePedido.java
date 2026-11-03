@@ -23,7 +23,8 @@ public class DetallePedido {
     private Integer cantidad;
     private Double precioUnitario;
 
-    public DetallePedido() {}
+    public DetallePedido() {
+    }
 
     public DetallePedido(Long productoId, String productoNombre, Integer cantidad, Double precioUnitario) {
         this.productoId = productoId;
@@ -32,27 +33,59 @@ public class DetallePedido {
         this.precioUnitario = precioUnitario;
     }
 
-    // Calcula el subtotal del detalle del pedido multiplicando la cantidad por el precio unitario.
+    // Calcula el subtotal del detalle del pedido multiplicando la cantidad por el
+    // precio unitario.
     public Double getSubtotal() {
-        if (cantidad == null || precioUnitario == null) return 0.0;
+        if (cantidad == null || precioUnitario == null)
+            return 0.0;
         return cantidad * precioUnitario;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Pedido getPedido() { return pedido; }
-    public void setPedido(Pedido pedido) { this.pedido = pedido; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Long getProductoId() { return productoId; }
-    public void setProductoId(Long productoId) { this.productoId = productoId; }
+    public Pedido getPedido() {
+        return pedido;
+    }
 
-    public String getProductoNombre() { return productoNombre; }
-    public void setProductoNombre(String productoNombre) { this.productoNombre = productoNombre; }
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
 
-    public Integer getCantidad() { return cantidad; }
-    public void setCantidad(Integer cantidad) { this.cantidad = cantidad; }
+    public Long getProductoId() {
+        return productoId;
+    }
 
-    public Double getPrecioUnitario() { return precioUnitario; }
-    public void setPrecioUnitario(Double precioUnitario) { this.precioUnitario = precioUnitario; }
+    public void setProductoId(Long productoId) {
+        this.productoId = productoId;
+    }
+
+    public String getProductoNombre() {
+        return productoNombre;
+    }
+
+    public void setProductoNombre(String productoNombre) {
+        this.productoNombre = productoNombre;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public Double getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    public void setPrecioUnitario(Double precioUnitario) {
+        this.precioUnitario = precioUnitario;
+    }
 }

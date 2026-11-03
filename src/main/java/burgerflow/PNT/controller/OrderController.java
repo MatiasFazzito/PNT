@@ -54,12 +54,15 @@ public class OrderController {
         }
 
         try {
-            // 2. Intentamos crear el pedido usando el Service, que se encarga de toda la lógica de negocio.
+            // 2. Intentamos crear el pedido usando el Service, que se encarga de toda la
+            // lógica de negocio.
             Pedido creado = pedidoService.crearPedido(request, usuario);
-            // 3. Si todo sale bien, devolvemos un código 201 (Creado) y el ticket del pedido.
+            // 3. Si todo sale bien, devolvemos un código 201 (Creado) y el ticket del
+            // pedido.
             return ResponseEntity.status(HttpStatus.CREATED).body(creado);
         } catch (IllegalArgumentException e) {
-            // 4. Si el Service falla (ej. no hay stock), atajamos el error y devolvemos un 400 (Bad Request).
+            // 4. Si el Service falla (ej. no hay stock), atajamos el error y devolvemos un
+            // 400 (Bad Request).
             return ResponseEntity.badRequest().body(Map.of("mensaje", e.getMessage()));
         }
     }
@@ -73,11 +76,13 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("mensaje", "Iniciá sesión para ver tus pedidos"));
         }
-        // Usamos el email del usuario en sesión para buscar solo sus pedidos en la base de datos.
+        // Usamos el email del usuario en sesión para buscar solo sus pedidos en la base
+        // de datos.
         return ResponseEntity.ok(pedidoService.getPedidosDeCliente(usuario.getEmail()));
     }
 
-    // GET: Trae todo lo que haya que cocinar o entregar (ignora los entregados o cancelados).
+    // GET: Trae todo lo que haya que cocinar o entregar (ignora los entregados o
+    // cancelados).
     @GetMapping("/api/pedidos/activos")
     @ResponseBody
     public List<Pedido> pedidosActivos() {

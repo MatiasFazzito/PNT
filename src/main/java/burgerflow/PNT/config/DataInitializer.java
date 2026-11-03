@@ -23,14 +23,17 @@ public class DataInitializer {
             // Inserta productos si la tabla está vacía
             if (productoRepository.count() == 0) {
                 productoRepository.save(new Producto(null, "BurgerFlow Doble Bacon",
-                        "Doble carne, cheddar y bacon crocante", 8500.0, 10, "Hamburguesas", "/Images/burgerDobleCarne.jpg", true));
+                        "Doble carne, cheddar y bacon crocante", 8500.0, 10, "Hamburguesas",
+                        "/Images/burgerDobleCarne.jpg", true));
                 productoRepository.save(new Producto(null, "Papas Cheeseburger",
-                        "Papas fritas con cheddar fundido y carne", 4200.0, 15, "Acompañamientos", "/Images/papasCheddar.jpg", true));
+                        "Papas fritas con cheddar fundido y carne", 4200.0, 15, "Acompañamientos",
+                        "/Images/papasCheddar.jpg", true));
                 productoRepository.save(new Producto(null, "Gaseosa 500ml", "Línea Coca-Cola bien fría", 1800.0, 20,
                         "Bebidas", "/Images/gaseosaCocaCola.jpg", true));
             }
 
-            // Si la base ya existía, les asigna la foto a los productos de ejemplo que no tengan imagen
+            // Si la base ya existía, les asigna la foto a los productos de ejemplo que no
+            // tengan imagen
             asignarImagenSiFalta(productoRepository, "BurgerFlow Doble Bacon", "/Images/burgerDobleCarne.jpg");
             asignarImagenSiFalta(productoRepository, "Papas Cheeseburger", "/Images/papasCheddar.jpg");
             asignarImagenSiFalta(productoRepository, "Gaseosa 500ml", "/Images/gaseosaCocaCola.jpg");

@@ -50,19 +50,19 @@ const Carrito = {
 };
 
 function pintarCarrito() {
-      const items = Carrito.obtener();
-      const vacio = document.getElementById('carrito-vacio');
-      const contenido = document.getElementById('carrito-contenido');
+  const items = Carrito.obtener();
+  const vacio = document.getElementById('carrito-vacio');
+  const contenido = document.getElementById('carrito-contenido');
 
-      if (items.length === 0) {
-        vacio.classList.remove('oculto');
-        contenido.classList.add('oculto');
-        return;
-      }
-      vacio.classList.add('oculto');
-      contenido.classList.remove('oculto');
+  if (items.length === 0) {
+    vacio.classList.remove('oculto');
+    contenido.classList.add('oculto');
+    return;
+  }
+  vacio.classList.add('oculto');
+  contenido.classList.remove('oculto');
 
-      document.getElementById('filas-carrito').innerHTML = items.map(i => `
+  document.getElementById('filas-carrito').innerHTML = items.map(i => `
     <tr>
       <td>${escapeHtml(i.nombre)}</td>
       <td>$${i.precio.toLocaleString('es-AR')}</td>
@@ -78,80 +78,80 @@ function pintarCarrito() {
     </tr>
   `).join('');
 
-      document.getElementById('total-carrito').textContent = '$' + Carrito.total().toLocaleString('es-AR');
+  document.getElementById('total-carrito').textContent = '$' + Carrito.total().toLocaleString('es-AR');
 
-      document.querySelectorAll('[data-accion]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = Number(btn.dataset.id);
-          const item = Carrito.obtener().find(i => i.productoId === id);
-          if (btn.dataset.accion === 'mas' && item.cantidad < item.stockDisponible) {
-            Carrito.actualizarCantidad(id, item.cantidad + 1);
-          } else if (btn.dataset.accion === 'menos') {
-            Carrito.actualizarCantidad(id, item.cantidad - 1);
-          } else if (btn.dataset.accion === 'quitar') {
-            Carrito.quitar(id);
-          }
-          pintarCarrito();
-        });
-      });
-    }
-
-    // Personal (ADMIN/EMPLEADO): carga el pedido a nombre de un cliente (mostrador/teléfono)
-    const esPersonal = Api.tieneRol('ADMIN', 'EMPLEADO');
-    if (esPersonal) {
-      document.getElementById('campo-cliente').style.display = 'block';
-      const selectEntrega = document.getElementById('tipoEntrega');
-      selectEntrega.insertBefore(new Option('Consumo en mostrador', 'MOSTRADOR'), selectEntrega.firstChild);
-      selectEntrega.value = 'MOSTRADOR';
-      document.getElementById('btn-confirmar').textContent = 'Cargar pedido';
-    }
-
-    document.getElementById('tipoEntrega').addEventListener('change', (e) => {
-      document.getElementById('campo-direccion').style.display = e.target.value === 'DELIVERY' ? 'block' : 'none';
+  document.querySelectorAll('[data-accion]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = Number(btn.dataset.id);
+      const item = Carrito.obtener().find(i => i.productoId === id);
+      if (btn.dataset.accion === 'mas' && item.cantidad < item.stockDisponible) {
+        Carrito.actualizarCantidad(id, item.cantidad + 1);
+      } else if (btn.dataset.accion === 'menos') {
+        Carrito.actualizarCantidad(id, item.cantidad - 1);
+      } else if (btn.dataset.accion === 'quitar') {
+        Carrito.quitar(id);
+      }
+      pintarCarrito();
     });
+  });
+}
 
-    document.getElementById('form-checkout').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const mensaje = document.getElementById('mensaje');
-      mensaje.className = 'form-mensaje';
+// Personal (ADMIN/EMPLEADO): carga el pedido a nombre de un cliente (mostrador/teléfono)
+const esPersonal = Api.tieneRol('ADMIN', 'EMPLEADO');
+if (esPersonal) {
+  document.getElementById('campo-cliente').style.display = 'block';
+  const selectEntrega = document.getElementById('tipoEntrega');
+  selectEntrega.insertBefore(new Option('Consumo en mostrador', 'MOSTRADOR'), selectEntrega.firstChild);
+  selectEntrega.value = 'MOSTRADOR';
+  document.getElementById('btn-confirmar').textContent = 'Cargar pedido';
+}
 
-      if (!Api.estaLogueado()) {
-        window.location.href = 'login.html';
-        return;
-      }
+document.getElementById('tipoEntrega').addEventListener('change', (e) => {
+  document.getElementById('campo-direccion').style.display = e.target.value === 'DELIVERY' ? 'block' : 'none';
+});
 
-      const items = Carrito.obtener();
-      if (items.length === 0) return;
+document.getElementById('form-checkout').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const mensaje = document.getElementById('mensaje');
+  mensaje.className = 'form-mensaje';
 
-      const datos = {
-        tipoEntrega: document.getElementById('tipoEntrega').value,
-        direccionEntrega: document.getElementById('direccion').value.trim(),
-        observaciones: document.getElementById('observaciones').value.trim(),
-        items: items.map(i => ({ productoId: i.productoId, cantidad: i.cantidad }))
-      };
+  if (!Api.estaLogueado()) {
+    window.location.href = 'login.html';
+    return;
+  }
 
-      if (esPersonal) {
-        const nombre = document.getElementById('clienteNombre').value.trim();
-        if (!nombre) {
-          mensaje.textContent = 'Ingresá el nombre del cliente';
-          mensaje.className = 'form-mensaje error';
-          return;
-        }
-        datos.clienteNombre = nombre;
-      }
+  const items = Carrito.obtener();
+  if (items.length === 0) return;
 
-      try {
-        await Api.crearPedido(datos);
-        Carrito.vaciar();
-        mensaje.textContent = esPersonal
-          ? '¡Pedido cargado! Lo ves en la cola de cocina.'
-          : '¡Pedido confirmado! Podés seguir su estado en "Mis pedidos".';
-        mensaje.className = 'form-mensaje ok';
-        setTimeout(() => { window.location.href = esPersonal ? '/cocina' : 'mis-pedidos.html'; }, 1200);
-      } catch (err) {
-        mensaje.textContent = err.message;
-        mensaje.className = 'form-mensaje error';
-      }
-    });
+  const datos = {
+    tipoEntrega: document.getElementById('tipoEntrega').value,
+    direccionEntrega: document.getElementById('direccion').value.trim(),
+    observaciones: document.getElementById('observaciones').value.trim(),
+    items: items.map(i => ({ productoId: i.productoId, cantidad: i.cantidad }))
+  };
 
-    pintarCarrito();
+  if (esPersonal) {
+    const nombre = document.getElementById('clienteNombre').value.trim();
+    if (!nombre) {
+      mensaje.textContent = 'Ingresá el nombre del cliente';
+      mensaje.className = 'form-mensaje error';
+      return;
+    }
+    datos.clienteNombre = nombre;
+  }
+
+  try {
+    await Api.crearPedido(datos);
+    Carrito.vaciar();
+    mensaje.textContent = esPersonal
+      ? '¡Pedido cargado! Lo ves en la cola de cocina.'
+      : '¡Pedido confirmado! Podés seguir su estado en "Mis pedidos".';
+    mensaje.className = 'form-mensaje ok';
+    setTimeout(() => { window.location.href = esPersonal ? '/cocina' : 'mis-pedidos.html'; }, 1200);
+  } catch (err) {
+    mensaje.textContent = err.message;
+    mensaje.className = 'form-mensaje error';
+  }
+});
+
+pintarCarrito();

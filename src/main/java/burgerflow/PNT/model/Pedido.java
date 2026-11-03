@@ -18,7 +18,8 @@ public class Pedido {
 
     private String clienteEmail;
     private String clienteNombre;
-    // Email del empleado/admin que cargó el pedido (null si lo hizo el propio cliente)
+    // Email del empleado/admin que cargó el pedido (null si lo hizo el propio
+    // cliente)
     private String cargadoPor;
     @Enumerated(EnumType.STRING)
     private EstadoPedido estado;
@@ -35,7 +36,8 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<DetallePedido> items = new ArrayList<>();
 
-    public Pedido() {}
+    public Pedido() {
+    }
 
     public Pedido(Long id, String clienteEmail, EstadoPedido estado, Double total, String tipoEntrega) {
         this.id = id;
@@ -50,36 +52,91 @@ public class Pedido {
         items.add(item);
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getClienteEmail() { return clienteEmail; }
-    public void setClienteEmail(String clienteEmail) { this.clienteEmail = clienteEmail; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getClienteNombre() { return clienteNombre; }
-    public void setClienteNombre(String clienteNombre) { this.clienteNombre = clienteNombre; }
+    public String getClienteEmail() {
+        return clienteEmail;
+    }
 
-    public String getCargadoPor() { return cargadoPor; }
-    public void setCargadoPor(String cargadoPor) { this.cargadoPor = cargadoPor; }
+    public void setClienteEmail(String clienteEmail) {
+        this.clienteEmail = clienteEmail;
+    }
 
-    public EstadoPedido getEstado() { return estado; }
-    public void setEstado(EstadoPedido estado) { this.estado = estado; }
+    public String getClienteNombre() {
+        return clienteNombre;
+    }
 
-    public Double getTotal() { return total; }
-    public void setTotal(Double total) { this.total = total; }
+    public void setClienteNombre(String clienteNombre) {
+        this.clienteNombre = clienteNombre;
+    }
 
-    public String getTipoEntrega() { return tipoEntrega; }
-    public void setTipoEntrega(String tipoEntrega) { this.tipoEntrega = tipoEntrega; }
+    public String getCargadoPor() {
+        return cargadoPor;
+    }
 
-    public String getDireccionEntrega() { return direccionEntrega; }
-    public void setDireccionEntrega(String direccionEntrega) { this.direccionEntrega = direccionEntrega; }
+    public void setCargadoPor(String cargadoPor) {
+        this.cargadoPor = cargadoPor;
+    }
 
-    public String getObservaciones() { return observaciones; }
-    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
+    public EstadoPedido getEstado() {
+        return estado;
+    }
 
-    public LocalDateTime getFechaCreacion() { return fechaCreacion; }
-    public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+    public void setEstado(EstadoPedido estado) {
+        this.estado = estado;
+    }
 
-    public List<DetallePedido> getItems() { return items; }
-    public void setItems(List<DetallePedido> items) { this.items = items; }
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
+    public String getTipoEntrega() {
+        return tipoEntrega;
+    }
+
+    public void setTipoEntrega(String tipoEntrega) {
+        this.tipoEntrega = tipoEntrega;
+    }
+
+    public String getDireccionEntrega() {
+        return direccionEntrega;
+    }
+
+    public void setDireccionEntrega(String direccionEntrega) {
+        this.direccionEntrega = direccionEntrega;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public List<DetallePedido> getItems() {
+        return items;
+    }
+
+    public void setItems(List<DetallePedido> items) {
+        this.items = items;
+    }
 }

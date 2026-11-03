@@ -29,7 +29,8 @@ public class MenuController {
     // POST: Sirve para agregar un item al menú.
     @PostMapping
     public ResponseEntity<Producto> crearProductoApi(@RequestBody Producto producto) {
-        // Si al crear el producto no nos avisan si está activo, por defecto lo habilitamos para la venta.
+        // Si al crear el producto no nos avisan si está activo, por defecto lo
+        // habilitamos para la venta.
         if (producto.getActivo() == null) {
             producto.setActivo(true);
         }
@@ -37,7 +38,7 @@ public class MenuController {
         return ResponseEntity.ok(producto);
     }
 
-    // PUT: Pisa todos los datos de un producto existente. 
+    // PUT: Pisa todos los datos de un producto existente.
     @PutMapping("/{id}")
     public ResponseEntity<Producto> actualizarProductoApi(@PathVariable Long id, @RequestBody Producto producto) {
         producto.setId(id);
@@ -45,19 +46,21 @@ public class MenuController {
         return ResponseEntity.ok(producto);
     }
 
-    // PATCH: Endpoint específico para modificar solo la cantidad disponible en el inventario.
+    // PATCH: Endpoint específico para modificar solo la cantidad disponible en el
+    // inventario.
     @PatchMapping("/{id}/stock")
     public ResponseEntity<Void> actualizarStockApi(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
         Integer nuevoStock = body.get("stock");
-        dataService.actualizarStock(id, nuevoStock); 
+        dataService.actualizarStock(id, nuevoStock);
         return ResponseEntity.ok().build();
     }
 
-    // PATCH: Sirve para ocultar un producto temporalmente sin borrarlo de la base de datos.
+    // PATCH: Sirve para ocultar un producto temporalmente sin borrarlo de la base
+    // de datos.
     @PatchMapping("/{id}/estado")
     public ResponseEntity<Void> cambiarEstadoApi(@PathVariable Long id, @RequestBody Map<String, Boolean> body) {
         Boolean nuevoEstado = body.get("activo");
-        dataService.cambiarEstadoProducto(id, nuevoEstado); 
+        dataService.cambiarEstadoProducto(id, nuevoEstado);
         return ResponseEntity.ok().build();
     }
 }

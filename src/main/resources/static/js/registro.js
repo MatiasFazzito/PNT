@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const mensaje = document.getElementById('mensaje');
-    
+
     if (mensaje) {
       mensaje.textContent = '';
       mensaje.className = 'form-mensaje';

@@ -28,7 +28,8 @@ public class PedidoService {
         this.productoRepository = productoRepository;
     }
 
-    // @Transactional asegura que si algo falla, toda la operación se cancela y no se guarda un pedido a medias en la base de datos
+    // @Transactional asegura que si algo falla, toda la operación se cancela y no
+    // se guarda un pedido a medias en la base de datos
     @Transactional
     public Pedido crearPedido(PedidoRequest request, Usuario usuario) {
         // 1. Validación básica
@@ -39,8 +40,8 @@ public class PedidoService {
         // 2. Validamos el tipo de entrega según quién está operando el sistema
         String tipoEntrega = request.tipoEntrega() == null ? "" : request.tipoEntrega().trim().toUpperCase();
         boolean esPersonal = esPersonal(usuario);
-        
-        // Si es un cliente normal, solo puede pedir DELIVERY o RETIRO. 
+
+        // Si es un cliente normal, solo puede pedir DELIVERY o RETIRO.
         // Si es empleado/admin, se le habilita la opción MOSTRADOR.
         boolean tipoValido = tipoEntrega.equals("DELIVERY") || tipoEntrega.equals("RETIRO")
                 || (esPersonal && tipoEntrega.equals("MOSTRADOR"));
@@ -49,7 +50,7 @@ public class PedidoService {
                     ? "El tipo de entrega debe ser MOSTRADOR, RETIRO o DELIVERY"
                     : "El tipo de entrega debe ser DELIVERY o RETIRO");
         }
-        
+
         // Si pidió delivery, se exige que haya una dirección de entrega
         String direccion = request.direccionEntrega() == null ? "" : request.direccionEntrega().trim();
         if (tipoEntrega.equals("DELIVERY") && direccion.isEmpty()) {
@@ -57,10 +58,11 @@ public class PedidoService {
         }
 
         Pedido pedido = new Pedido();
-        
+
         // 3. Se arma el perfil de quién hace el pedido.
         if (esPersonal) {
-            // Si el que carga el pedido es el cajero, tomamos el nombre del cliente que le dictó en el local.
+            // Si el que carga el pedido es el cajero, tomamos el nombre del cliente que le
+            // dictó en el local.
             String nombre = request.clienteNombre() == null ? "" : request.clienteNombre().trim();
             if (nombre.isEmpty()) {
                 throw new IllegalArgumentException("Ingresá el nombre del cliente");
@@ -72,21 +74,24 @@ public class PedidoService {
             pedido.setClienteEmail(null);
             pedido.setCargadoPor(usuario.getEmail()); // Dejamos registro de qué empleado lo cobró.
         } else {
-            // Si es un pedido online, sacamos los datos directamente del usuario que inició sesión.
+            // Si es un pedido online, sacamos los datos directamente del usuario que inició
+            // sesión.
             pedido.setClienteNombre(usuario.getNombre());
             pedido.setClienteEmail(usuario.getEmail());
         }
-        
+
         // Seteamos los datos iniciales por defecto.
         pedido.setEstado(EstadoPedido.RECIBIDO);
         pedido.setTipoEntrega(tipoEntrega);
         pedido.setDireccionEntrega(tipoEntrega.equals("DELIVERY") ? direccion : null);
         pedido.setObservaciones(request.observaciones() == null || request.observaciones().isBlank()
-                ? null : request.observaciones().trim());
+                ? null
+                : request.observaciones().trim());
 
         double total = 0;
-        
-        // 4. Procesamos el carrito: iteramos sobre cada ítem que mandaron en el request.
+
+        // 4. Procesamos el carrito: iteramos sobre cada ítem que mandaron en el
+        // request.
         for (PedidoRequest.ItemRequest item : request.items()) {
             if (item.productoId() == null || item.cantidad() == null || item.cantidad() <= 0) {
                 throw new IllegalArgumentException("Cada ítem necesita productoId y una cantidad mayor a 0");
@@ -112,7 +117,8 @@ public class PedidoService {
             producto.setStock(stock - item.cantidad());
             productoRepository.save(producto);
 
-            // 6. Armamos el "ticket" (DetallePedido) de este producto y lo sumamos al total del pedido.
+            // 6. Armamos el "ticket" (DetallePedido) de este producto y lo sumamos al total
+            // del pedido.
             DetallePedido detalle = new DetallePedido(producto.getId(), producto.getNombre(),
                     item.cantidad(), producto.getPrecio());
             pedido.agregarItem(detalle);
@@ -131,7 +137,8 @@ public class PedidoService {
 
     /**
      * Cambia el estado validando que la transición sea lógica
-     * Si el pedido se cancela por algún motivo, ejecuta el reintegro de stock automático.
+     * Si el pedido se cancela por algún motivo, ejecuta el reintegro de stock
+     * automático.
      */
     @Transactional
     public Pedido cambiarEstado(Long id, EstadoPedido nuevoEstado) {
@@ -145,7 +152,8 @@ public class PedidoService {
             throw new IllegalArgumentException("No se puede pasar de " + actual + " a " + nuevoEstado);
         }
 
-        // Si se cancela la orden, llamamos al método que devuelve las hamburguesas al stock
+        // Si se cancela la orden, llamamos al método que devuelve las hamburguesas al
+        // stock
         if (nuevoEstado == EstadoPedido.CANCELADO) {
             reponerStock(pedido);
         }
@@ -154,7 +162,8 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    // Recorre los ítems del pedido cancelado y le vuelve a sumar la cantidad al stock del producto original.
+    // Recorre los ítems del pedido cancelado y le vuelve a sumar la cantidad al
+    // stock del producto original.
     private void reponerStock(Pedido pedido) {
         for (DetallePedido item : pedido.getItems()) {
             productoRepository.findById(item.getProductoId()).ifPresent(producto -> {
@@ -165,14 +174,16 @@ public class PedidoService {
         }
     }
 
-    // Trae los pedidos para la vista de la cocina (los que no están cancelados ni entregados).
+    // Trae los pedidos para la vista de la cocina (los que no están cancelados ni
+    // entregados).
     @Transactional(readOnly = true)
     public List<Pedido> getPedidosActivos() {
         return pedidoRepository.findByEstadoInOrderByFechaCreacionAsc(
                 Arrays.stream(EstadoPedido.values()).filter(EstadoPedido::esActivo).toList());
     }
 
-    // Trae el historial de pedidos de un cliente específico, ordenados del más nuevo al más viejo.
+    // Trae el historial de pedidos de un cliente específico, ordenados del más
+    // nuevo al más viejo.
     @Transactional(readOnly = true)
     public List<Pedido> getPedidosDeCliente(String email) {
         return pedidoRepository.findByClienteEmailOrderByFechaCreacionDesc(email);

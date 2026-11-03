@@ -14,9 +14,13 @@
   --font-body: 'Work Sans', -apple-system, 'Segoe UI', sans-serif;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   margin: 0;
@@ -26,9 +30,14 @@ body {
   line-height: 1.5;
 }
 
-a { color: inherit; }
+a {
+  color: inherit;
+}
 
-img { max-width: 100%; display: block; }
+img {
+  max-width: 100%;
+  display: block;
+}
 
 .wrap {
   max-width: 1080px;
@@ -115,7 +124,12 @@ nav.main-nav a.active {
   position: relative;
 }
 
-.hero .wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: center; }
+.hero .wrap {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
 
 .hero h1 {
   font-family: var(--font-display);
@@ -152,11 +166,20 @@ nav.main-nav a.active {
   color: var(--tomato);
 }
 
-.hero-ticket ul { margin: 0; padding-left: 18px; font-size: 0.92rem; }
-.hero-ticket li { margin-bottom: 6px; }
+.hero-ticket ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.92rem;
+}
+
+.hero-ticket li {
+  margin-bottom: 6px;
+}
 
 @media (max-width: 780px) {
-  .hero .wrap { grid-template-columns: 1fr; }
+  .hero .wrap {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---------- Botones ---------- */
@@ -175,25 +198,64 @@ nav.main-nav a.active {
   transition: transform 0.1s ease, background 0.15s ease;
 }
 
-.btn:active { transform: translateY(1px); }
+.btn:active {
+  transform: translateY(1px);
+}
 
-.btn-primary { background: var(--tomato); color: var(--paper); }
-.btn-primary:hover { background: #a6350f; }
+.btn-primary {
+  background: var(--tomato);
+  color: var(--paper);
+}
 
-.btn-secondary { background: var(--mustard); color: var(--char); }
-.btn-secondary:hover { background: #cf9522; }
+.btn-primary:hover {
+  background: #a6350f;
+}
 
-.btn-outline { background: transparent; border-color: var(--char); color: var(--char); }
-.btn-outline:hover { background: var(--char); color: var(--paper); }
+.btn-secondary {
+  background: var(--mustard);
+  color: var(--char);
+}
 
-.btn-danger { background: transparent; border-color: var(--tomato); color: var(--tomato); }
-.btn-danger:hover { background: var(--tomato); color: var(--paper); }
+.btn-secondary:hover {
+  background: #cf9522;
+}
 
-.btn-sm { padding: 7px 14px; font-size: 0.8rem; }
-.btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+.btn-outline {
+  background: transparent;
+  border-color: var(--char);
+  color: var(--char);
+}
+
+.btn-outline:hover {
+  background: var(--char);
+  color: var(--paper);
+}
+
+.btn-danger {
+  background: transparent;
+  border-color: var(--tomato);
+  color: var(--tomato);
+}
+
+.btn-danger:hover {
+  background: var(--tomato);
+  color: var(--paper);
+}
+
+.btn-sm {
+  padding: 7px 14px;
+  font-size: 0.8rem;
+}
+
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 
 /* ---------- Secciones ---------- */
-main { padding: 44px 0 80px; }
+main {
+  padding: 44px 0 80px;
+}
 
 .section-title {
   font-family: var(--font-display);
@@ -202,7 +264,11 @@ main { padding: 44px 0 80px; }
   color: var(--char);
 }
 
-.section-sub { color: var(--ink-soft); margin: 0 0 28px; max-width: 60ch; }
+.section-sub {
+  color: var(--ink-soft);
+  margin: 0 0 28px;
+  max-width: 60ch;
+}
 
 .filtros {
   display: flex;
@@ -222,7 +288,10 @@ main { padding: 44px 0 80px; }
   color: var(--char);
 }
 
-.filtro-chip.activo { background: var(--char); color: var(--mustard); }
+.filtro-chip.activo {
+  background: var(--char);
+  color: var(--mustard);
+}
 
 /* ---------- Grilla de productos ---------- */
 .grid-productos {
@@ -244,14 +313,18 @@ main { padding: 44px 0 80px; }
 /* Foto del producto: ocupa todo el ancho de la tarjeta (compensa el padding de 18px) */
 .card-producto .producto-img {
   width: calc(100% + 36px);
-  max-width: none;               /* pisa el "img { max-width: 100% }" global */
+  max-width: none;
+  /* pisa el "img { max-width: 100% }" global */
   margin: -18px -18px 4px;
   aspect-ratio: 5 / 4;
   object-fit: cover;
   object-position: center 45%;
 }
 
-.card-producto.sin-stock { border-left-color: var(--ink-soft); opacity: 0.65; }
+.card-producto.sin-stock {
+  border-left-color: var(--ink-soft);
+  opacity: 0.65;
+}
 
 .card-producto .categoria {
   font-size: 0.72rem;
@@ -267,7 +340,12 @@ main { padding: 44px 0 80px; }
   color: var(--char);
 }
 
-.card-producto p { margin: 0; color: var(--ink-soft); font-size: 0.9rem; flex-grow: 1; }
+.card-producto p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  flex-grow: 1;
+}
 
 .card-producto .fila-precio {
   display: flex;
@@ -276,9 +354,21 @@ main { padding: 44px 0 80px; }
   margin-top: 6px;
 }
 
-.precio { font-family: var(--font-display); font-size: 1.3rem; color: var(--tomato); }
-.stock-info { font-size: 0.78rem; color: var(--pickle); }
-.stock-info.agotado { color: var(--tomato); font-weight: 700; }
+.precio {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--tomato);
+}
+
+.stock-info {
+  font-size: 0.78rem;
+  color: var(--pickle);
+}
+
+.stock-info.agotado {
+  color: var(--tomato);
+  font-weight: 700;
+}
 
 /* ---------- Formularios ---------- */
 .form-card {
@@ -289,11 +379,26 @@ main { padding: 44px 0 80px; }
   padding: 32px;
 }
 
-.form-card h2 { font-family: var(--font-display); margin-top: 0; color: var(--char); }
+.form-card h2 {
+  font-family: var(--font-display);
+  margin-top: 0;
+  color: var(--char);
+}
 
-.campo { margin-bottom: 16px; }
-.campo label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; }
-.campo input, .campo select, .campo textarea {
+.campo {
+  margin-bottom: 16px;
+}
+
+.campo label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid var(--line);
@@ -301,7 +406,11 @@ main { padding: 44px 0 80px; }
   font: inherit;
   color: var(--ink);
 }
-.campo textarea { resize: vertical; min-height: 70px; }
+
+.campo textarea {
+  resize: vertical;
+  min-height: 70px;
+}
 
 .form-mensaje {
   padding: 10px 14px;
@@ -309,13 +418,35 @@ main { padding: 44px 0 80px; }
   font-size: 0.88rem;
   display: none;
 }
-.form-mensaje.error { display: block; background: #fbe4dc; color: var(--tomato); border: 1px solid var(--tomato); }
-.form-mensaje.ok { display: block; background: #e9f0de; color: var(--pickle); border: 1px solid var(--pickle); }
 
-.form-footer { margin-top: 18px; font-size: 0.88rem; color: var(--ink-soft); text-align: center; }
+.form-mensaje.error {
+  display: block;
+  background: #fbe4dc;
+  color: var(--tomato);
+  border: 1px solid var(--tomato);
+}
+
+.form-mensaje.ok {
+  display: block;
+  background: #e9f0de;
+  color: var(--pickle);
+  border: 1px solid var(--pickle);
+}
+
+.form-footer {
+  margin-top: 18px;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  text-align: center;
+}
 
 /* ---------- Carrito ---------- */
-.tabla-carrito { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+.tabla-carrito {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+}
+
 .tabla-carrito th {
   text-align: left;
   font-size: 0.75rem;
@@ -324,10 +455,26 @@ main { padding: 44px 0 80px; }
   border-bottom: 2px solid var(--char);
   padding: 8px 6px;
 }
-.tabla-carrito td { padding: 12px 6px; border-bottom: 1px solid var(--line); font-size: 0.92rem; }
-.cant-control { display: flex; align-items: center; gap: 8px; }
+
+.tabla-carrito td {
+  padding: 12px 6px;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.92rem;
+}
+
+.cant-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .cant-control button {
-  width: 26px; height: 26px; border: 1px solid var(--char); background: var(--paper); cursor: pointer; font-weight: 700;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--char);
+  background: var(--paper);
+  cursor: pointer;
+  font-weight: 700;
 }
 
 .resumen-total {
@@ -341,7 +488,11 @@ main { padding: 44px 0 80px; }
 }
 
 /* ---------- Tickets de pedido (cliente / cocina / admin) ---------- */
-.lista-pedidos { display: flex; flex-direction: column; gap: 16px; }
+.lista-pedidos {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
 .ticket-pedido {
   background: #fffaf0;
@@ -350,11 +501,28 @@ main { padding: 44px 0 80px; }
   padding: 18px 20px;
 }
 
-.ticket-pedido.estado-RECIBIDO { border-left-color: var(--mustard); }
-.ticket-pedido.estado-EN_PREPARACION { border-left-color: var(--tomato); }
-.ticket-pedido.estado-LISTO_PARA_ENTREGAR { border-left-color: var(--pickle); }
-.ticket-pedido.estado-ENTREGADO { border-left-color: var(--ink-soft); opacity: 0.75; }
-.ticket-pedido.estado-CANCELADO { border-left-color: var(--ink-soft); opacity: 0.55; text-decoration: line-through; }
+.ticket-pedido.estado-RECIBIDO {
+  border-left-color: var(--mustard);
+}
+
+.ticket-pedido.estado-EN_PREPARACION {
+  border-left-color: var(--tomato);
+}
+
+.ticket-pedido.estado-LISTO_PARA_ENTREGAR {
+  border-left-color: var(--pickle);
+}
+
+.ticket-pedido.estado-ENTREGADO {
+  border-left-color: var(--ink-soft);
+  opacity: 0.75;
+}
+
+.ticket-pedido.estado-CANCELADO {
+  border-left-color: var(--ink-soft);
+  opacity: 0.55;
+  text-decoration: line-through;
+}
 
 .ticket-cabecera {
   display: flex;
@@ -364,7 +532,11 @@ main { padding: 44px 0 80px; }
   margin-bottom: 10px;
 }
 
-.ticket-cabecera h3 { font-family: var(--font-display); margin: 0; font-size: 1.1rem; }
+.ticket-cabecera h3 {
+  font-family: var(--font-display);
+  margin: 0;
+  font-size: 1.1rem;
+}
 
 .badge-estado {
   font-size: 0.72rem;
@@ -376,27 +548,75 @@ main { padding: 44px 0 80px; }
   height: fit-content;
 }
 
-.ticket-items { margin: 0 0 10px; padding-left: 18px; font-size: 0.88rem; color: var(--ink-soft); }
-.ticket-acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.ticket-items {
+  margin: 0 0 10px;
+  padding-left: 18px;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.ticket-acciones {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
 
 /* ---------- Tabla admin ---------- */
-.tabla-admin { width: 100%; border-collapse: collapse; }
-.tabla-admin th {
-  text-align: left; font-size: 0.75rem; color: var(--ink-soft);
-  border-bottom: 2px solid var(--char); padding: 10px 8px;
+.tabla-admin {
+  width: 100%;
+  border-collapse: collapse;
 }
-.tabla-admin td { padding: 10px 8px; border-bottom: 1px solid var(--line); font-size: 0.88rem; }
-.tabla-admin tr.inactivo { opacity: 0.5; }
 
-.tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid var(--char); }
-.tab-btn {
-  padding: 10px 18px; border: none; background: none; cursor: pointer;
-  font-weight: 700; font-size: 0.9rem; color: var(--ink-soft);
-  border-bottom: 3px solid transparent; margin-bottom: -2px;
+.tabla-admin th {
+  text-align: left;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  border-bottom: 2px solid var(--char);
+  padding: 10px 8px;
 }
-.tab-btn.activo { color: var(--char); border-bottom-color: var(--tomato); }
-.tab-panel { display: none; }
-.tab-panel.activo { display: block; }
+
+.tabla-admin td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.88rem;
+}
+
+.tabla-admin tr.inactivo {
+  opacity: 0.5;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid var(--char);
+}
+
+.tab-btn {
+  padding: 10px 18px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+}
+
+.tab-btn.activo {
+  color: var(--char);
+  border-bottom-color: var(--tomato);
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.activo {
+  display: block;
+}
 
 .vacio {
   text-align: center;
@@ -413,9 +633,17 @@ footer.site-footer {
   font-size: 0.82rem;
 }
 
-.oculto { display: none !important; }
+.oculto {
+  display: none !important;
+}
 
 @media (max-width: 600px) {
-  .wrap { padding: 0 16px; }
-  nav.main-nav { width: 100%; justify-content: flex-start; }
+  .wrap {
+    padding: 0 16px;
+  }
+
+  nav.main-nav {
+    width: 100%;
+    justify-content: flex-start;
+  }
 }

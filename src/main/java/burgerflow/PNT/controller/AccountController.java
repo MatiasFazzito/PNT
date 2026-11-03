@@ -23,6 +23,7 @@ public class AccountController {
         return "mis-pedidos";
     }
 
+
     @GetMapping({"/admin", "/admin.html"})
     public String admin() {
         return "admin";

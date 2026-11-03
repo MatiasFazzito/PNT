@@ -57,11 +57,7 @@ public ResponseEntity<?> registrar(@RequestBody Usuario usuario, HttpSession ses
         usuario.setRol("CLIENTE");
     }
 
-    Usuario nuevoUsuario = usuarioRepository.save(usuario);
-
-    // *Solución:* Iniciar sesión automáticamente guardándolo en la HttpSession
-    session.setAttribute("usuario", nuevoUsuario);
-
-    return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
-}
+        Usuario nuevoUsuario = usuarioRepository.save(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
+    }
 }

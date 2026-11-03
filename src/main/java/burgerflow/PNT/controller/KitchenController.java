@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+// Este controlador maneja las rutas relacionadas con la cocina y la gestión de pedidos en el panel de administración.
+
 @Controller
 @RequestMapping("/cocina")
 public class KitchenController {

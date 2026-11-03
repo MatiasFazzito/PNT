@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.Optional;
 
+// Este controlador maneja las rutas relacionadas con la autenticación y el registro de usuarios a través de la API REST.
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthRestController {
@@ -45,17 +47,21 @@ public class AuthRestController {
     }
 
     @PostMapping("/registro")
-    public ResponseEntity<?> registrar(@RequestBody Usuario usuario) {
-        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("mensaje", "El email ya se encuentra registrado"));
-        }
-
-        if (usuario.getRol() == null || usuario.getRol().isBlank()) {
-            usuario.setRol("CLIENTE");
-        }
-
-        Usuario nuevoUsuario = usuarioRepository.save(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
+public ResponseEntity<?> registrar(@RequestBody Usuario usuario, HttpSession session) {
+    if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("mensaje", "El email ya se encuentra registrado"));
     }
+
+    if (usuario.getRol() == null || usuario.getRol().isBlank()) {
+        usuario.setRol("CLIENTE");
+    }
+
+    Usuario nuevoUsuario = usuarioRepository.save(usuario);
+
+    // *Solución:* Iniciar sesión automáticamente guardándolo en la HttpSession
+    session.setAttribute("usuario", nuevoUsuario);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
+}
 }

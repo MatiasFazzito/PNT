@@ -11,6 +11,7 @@ function escapeHtml(str) {
 
 const API_BASE = '/api';
 
+// Función para normalizar categorías
 const Api = {
   guardarSesion(usuario) {
     localStorage.setItem('usuario', JSON.stringify(usuario));

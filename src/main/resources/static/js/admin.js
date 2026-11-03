@@ -1,6 +1,6 @@
 requiereRol('ADMIN');
 
-// --- Tabs ---
+// ================= TABS =================
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('activo'));
@@ -50,7 +50,7 @@ function actualizarCampoCategoriaNueva() {
   input.required = esNueva;
 }
 
-// Devuelve la categoría elegida. Si escribieron una nueva, valida que no exista (evita duplicados) y la agrega.
+// Devuelve la categoría elegida. Si escribieron una nueva, valida que no exista y la agrega.
 function categoriaElegida() {
   const select = document.getElementById('p-categoria');
   if (select.value !== NUEVA_CATEGORIA) return select.value;
@@ -58,11 +58,9 @@ function categoriaElegida() {
   const escrita = document.getElementById('p-categoria-nueva').value.trim();
   if (!escrita) return '';
 
-  // Verificar si ya existe en la lista (ignorando mayúsculas y acentos) para evitar duplicados
   const existente = CATEGORIAS.find(c => normalizarCategoria(c) === normalizarCategoria(escrita));
   if (existente) return existente;
 
-  // Si es totalmente nueva, la agregamos a la lista en memoria y la ordenamos alfabéticamente
   CATEGORIAS.push(escrita);
   CATEGORIAS.sort((a, b) => a.localeCompare(b, 'es'));
   return escrita;
@@ -70,11 +68,12 @@ function categoriaElegida() {
 
 document.getElementById('p-categoria').addEventListener('change', actualizarCampoCategoriaNueva);
 
+// Carga la lista de productos y los muestra en la tabla
 async function cargarProductos() {
   const tbody = document.getElementById('filas-productos');
   try {
     const productos = await Api.listarProductos();
-    
+
     tbody.innerHTML = productos.map(p => `
       <tr class="${p.activo ? '' : 'inactivo'}">
         <td>${escapeHtml(p.nombre)}</td>
@@ -135,6 +134,7 @@ async function cargarProductos() {
   }
 }
 
+// Abre el modal para crear o editar un producto
 function abrirModalProducto(producto) {
   document.getElementById('modal-mensaje').className = 'form-mensaje';
   document.getElementById('modal-titulo').textContent = producto ? 'Editar producto' : 'Nuevo producto';
@@ -149,11 +149,13 @@ function abrirModalProducto(producto) {
   document.getElementById('modal-producto').classList.remove('oculto');
 }
 
+// Eventos de botones y formulario
 document.getElementById('btn-nuevo-producto').addEventListener('click', () => abrirModalProducto(null));
 document.getElementById('btn-cerrar-modal').addEventListener('click', () => {
   document.getElementById('modal-producto').classList.add('oculto');
 });
 
+// Maneja el envío del formulario de producto (crear o actualizar)
 document.getElementById('form-producto').addEventListener('submit', async (e) => {
   e.preventDefault();
   const mensaje = document.getElementById('modal-mensaje');

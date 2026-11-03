@@ -3,6 +3,8 @@ package burgerflow.PNT.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+// Esta clase representa un detalle de pedido, que contiene información sobre un producto específico dentro de un pedido, incluyendo su cantidad y precio unitario.
+
 @Entity
 @Table(name = "detalle_pedido")
 public class DetallePedido {
@@ -21,7 +23,7 @@ public class DetallePedido {
     private Integer cantidad;
     private Double precioUnitario;
 
-    public DetallePedido() {} // Requerido por JPA
+    public DetallePedido() {}
 
     public DetallePedido(Long productoId, String productoNombre, Integer cantidad, Double precioUnitario) {
         this.productoId = productoId;
@@ -30,7 +32,7 @@ public class DetallePedido {
         this.precioUnitario = precioUnitario;
     }
 
-    // Calculado: lo usa el frontend (ticket de pedido)
+    // Calcula el subtotal del detalle del pedido multiplicando la cantidad por el precio unitario.
     public Double getSubtotal() {
         if (cantidad == null || precioUnitario == null) return 0.0;
         return cantidad * precioUnitario;

@@ -1,3 +1,5 @@
+// Catalogo de productos
+
 let PRODUCTOS = [];
 let categoriaActiva = 'TODAS';
 

@@ -1,3 +1,5 @@
+// Registro de usuario
+
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('form-registro');
   if (!form) return;
@@ -21,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const resp = await Api.registrar(datos);
       Api.guardarSesion(resp);
-      window.location.href = '/'; // Redirección estandarizada
+      window.location.href = '/';
     } catch (err) {
       if (mensaje) {
         mensaje.textContent = err.message;

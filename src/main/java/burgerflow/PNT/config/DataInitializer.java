@@ -32,8 +32,10 @@ public class DataInitializer {
 
             // Inserta pedidos si la tabla está vacía
             if (pedidoRepository.count() == 0) {
-                pedidoRepository.save(new Pedido(null, "cliente@ort.edu.ar", EstadoPedido.RECIBIDO, 12700.0, "DELIVERY"));
-                pedidoRepository.save(new Pedido(null, "juan@gmail.com", EstadoPedido.EN_PREPARACION, 6000.0, "RETIRO"));
+                pedidoRepository
+                        .save(new Pedido(null, "cliente@ort.edu.ar", EstadoPedido.RECIBIDO, 12700.0, "DELIVERY"));
+                pedidoRepository
+                        .save(new Pedido(null, "juan@gmail.com", EstadoPedido.EN_PREPARACION, 6000.0, "RETIRO"));
             }
 
             // Inserta usuarios si la tabla está vacía

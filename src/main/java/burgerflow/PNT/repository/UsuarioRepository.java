@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
+// Este repositorio proporciona métodos para acceder a los datos de los usuarios en la base de datos
+
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     // Buscar usuario por email (para verificar existencia y login)

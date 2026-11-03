@@ -1,3 +1,5 @@
+// Cocina: vista de pedidos activos y cambio de estado
+
 requiereRol('EMPLEADO', 'ADMIN');
 
 const SIGUIENTE_ESTADO = {

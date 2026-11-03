@@ -3,6 +3,8 @@ package burgerflow.PNT.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+// Este controlador maneja las rutas relacionadas con la cuenta de usuario, como login, registro y administración.
+
 @Controller
 public class AccountController {
 
@@ -16,15 +18,13 @@ public class AccountController {
         return "registro";
     }
 
-    // ✅ Mapeo para Mis Pedidos
     @GetMapping({"/mis-pedidos", "/mis-pedidos.html"})
     public String misPedidos() {
-        return "mis-pedidos"; // Devuelve templates/mis-pedidos.html
+        return "mis-pedidos";
     }
 
-    // ✅ Mapeo para el Panel de Administración
     @GetMapping({"/admin", "/admin.html"})
     public String admin() {
-        return "admin"; // Devuelve templates/admin.html
+        return "admin";
     }
 }

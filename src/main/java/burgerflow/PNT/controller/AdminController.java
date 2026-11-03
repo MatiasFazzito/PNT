@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+// Este controlador maneja las rutas relacionadas con la administración de productos en el panel de administración.
+
 @Controller
 @RequestMapping("/admin/productos")
 public class AdminController {

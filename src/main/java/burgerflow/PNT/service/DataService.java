@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// Este servicio proporciona métodos para interactuar con los datos de productos, pedidos y usuarios
+
 @Service
 public class DataService {
 
@@ -27,21 +29,6 @@ public class DataService {
 
     public List<Producto> getProductos() {
         return productoRepository.findAll();
-    }
-
-    public List<Pedido> getPedidos() {
-        return pedidoRepository.findAll();
-    }
-
-    public List<Usuario> getUsuarios() {
-        return usuarioRepository.findAll();
-    }
-
-    public void cambiarEstadoUsuario(Long id) {
-        usuarioRepository.findById(id).ifPresent(u -> {
-            u.setActivo(u.getActivo() == null ? false : !u.getActivo());
-            usuarioRepository.save(u);
-        });
     }
 
     public Producto guardarProducto(Producto producto) {
@@ -67,6 +54,21 @@ public class DataService {
         productoRepository.findById(id).ifPresent(p -> {
             p.setActivo(nuevoEstado);
             productoRepository.save(p);
+        });
+    }
+
+    public List<Pedido> getPedidos() {
+        return pedidoRepository.findAll();
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarioRepository.findAll();
+    }
+
+    public void cambiarEstadoUsuario(Long id) {
+        usuarioRepository.findById(id).ifPresent(u -> {
+            u.setActivo(u.getActivo() == null ? false : !u.getActivo());
+            usuarioRepository.save(u);
         });
     }
 

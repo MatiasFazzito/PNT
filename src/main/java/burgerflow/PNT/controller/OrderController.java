@@ -16,46 +16,45 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+// Este controlador maneja las rutas relacionadas con los pedidos, tanto para la vista web como para la API REST.
+
 @Controller
 public class OrderController {
 
     private final DataService dataService;
     private final PedidoService pedidoService;
 
-    // Inyección de dependencias: traemos los servicios que tienen la lógica pesada.
     public OrderController(DataService dataService, PedidoService pedidoService) {
         this.dataService = dataService;
         this.pedidoService = pedidoService;
     }
 
     // Punto de entrada para la página web visual del carrito.
-    // (/mis-pedidos se mapea en AccountController)
-    @GetMapping({"/carrito", "/carrito.html"})
+    @GetMapping({ "/carrito", "/carrito.html" })
     public String verCarrito() {
         return "carrito";
     }
 
-    // Endpoint básico para traer el listado completo de pedidos.
+    // GET: Endpoint para listar todos los pedidos (solo para la cocina).
     @GetMapping("/api/pedidos")
     @ResponseBody
     public List<Pedido> listarPedidos() {
         return dataService.getPedidos();
     }
 
-    // CREAR PEDIDO: Este es el endpoint que recibe el POST desde el fetch() del carrito.
+    // POST: Endpoint para crear un nuevo pedido.
     @PostMapping("/api/pedidos")
     @ResponseBody
     public ResponseEntity<?> crearPedido(@RequestBody PedidoRequest request, HttpSession session) {
         // 1. Verificamos si hay alguien con la sesión iniciada.
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario == null) {
-            // Si es un visitante fantasma, le cortamos el rostro con un error 401 (No autorizado).
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("mensaje", "Iniciá sesión para realizar un pedido"));
         }
-        
+
         try {
-            // 2. Le pasamos la pelota al PedidoService para que valide stock, precios, etc.
+            // 2. Intentamos crear el pedido usando el Service, que se encarga de toda la lógica de negocio.
             Pedido creado = pedidoService.crearPedido(request, usuario);
             // 3. Si todo sale bien, devolvemos un código 201 (Creado) y el ticket del pedido.
             return ResponseEntity.status(HttpStatus.CREATED).body(creado);
@@ -65,7 +64,7 @@ public class OrderController {
         }
     }
 
-    // PEDIDOS DEL CLIENTE LOGUEADO: Trae el historial de compras del usuario.
+    // GET: Trae el historial de compras del usuario.
     @GetMapping("/api/pedidos/mis-pedidos")
     @ResponseBody
     public ResponseEntity<?> misPedidos(HttpSession session) {
@@ -78,23 +77,19 @@ public class OrderController {
         return ResponseEntity.ok(pedidoService.getPedidosDeCliente(usuario.getEmail()));
     }
 
-    // PEDIDOS ACTIVOS: Este endpoint lo va a consumir la pantalla de la cocina.
-    // Trae todo lo que haya que cocinar o entregar (ignora los entregados o cancelados).
+    // GET: Trae todo lo que haya que cocinar o entregar (ignora los entregados o cancelados).
     @GetMapping("/api/pedidos/activos")
     @ResponseBody
     public List<Pedido> pedidosActivos() {
         return pedidoService.getPedidosActivos();
     }
 
-    // CAMBIAR ESTADO: Endpoint para que la cocina o el cajero avancen el pedido 
-    // (ej. de RECIBIDO a PREPARANDO, o a CANCELADO).
+    // PATCH: Endpoint para que la cocina o el cajero actualicen el pedido.
     @PatchMapping("/api/pedidos/{id}/estado")
     @ResponseBody
     public ResponseEntity<?> cambiarEstadoPedido(@PathVariable Long id, @RequestBody Map<String, String> body) {
         try {
-            // Extraemos el texto del JSON que nos manda el frontend (ej. {"estado": "LISTO"})
             EstadoPedido nuevoEstado = EstadoPedido.desdeTexto(body.get("estado"));
-            // Ejecutamos el cambio en el Service.
             return ResponseEntity.ok(pedidoService.cambiarEstado(id, nuevoEstado));
         } catch (NoSuchElementException e) {
             // Si el ID del pedido no existe en la BD.

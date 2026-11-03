@@ -1,3 +1,5 @@
+// Pedidos del cliente
+
 requiereRol('CLIENTE');
 
 async function cargarMisPedidos() {

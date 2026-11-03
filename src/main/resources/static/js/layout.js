@@ -1,3 +1,5 @@
+// Funciones de control de acceso y navegación
+
 function requiereRol(...rolesRequeridos) {
   const u = Api.usuario();
   if (!u || !u.rol) {

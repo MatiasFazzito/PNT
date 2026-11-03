@@ -15,28 +15,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+// Este servicio maneja la lógica de negocio relacionada con los pedidos, incluyendo creación, cambio de estado y consultas.
+
 @Service
 public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
     private final ProductoRepository productoRepository;
 
-    // Inyección de dependencias: conectamos los repositorios para poder hablar con la Base de Datos.
     public PedidoService(PedidoRepository pedidoRepository, ProductoRepository productoRepository) {
         this.pedidoRepository = pedidoRepository;
         this.productoRepository = productoRepository;
     }
 
-    // @Transactional asegura que si algo falla (ej. no hay stock de una hamburguesa), 
-    // toda la operación se cancela y no se guarda un pedido a medias en la base de datos.
+    // @Transactional asegura que si algo falla, toda la operación se cancela y no se guarda un pedido a medias en la base de datos
     @Transactional
     public Pedido crearPedido(PedidoRequest request, Usuario usuario) {
-        // 1. Validación básica: no me podés mandar un pedido fantasma sin productos.
+        // 1. Validación básica
         if (request == null || request.items() == null || request.items().isEmpty()) {
             throw new IllegalArgumentException("El pedido debe tener al menos un producto");
         }
 
-        // 2. Validamos el tipo de entrega según quién está operando el sistema.
+        // 2. Validamos el tipo de entrega según quién está operando el sistema
         String tipoEntrega = request.tipoEntrega() == null ? "" : request.tipoEntrega().trim().toUpperCase();
         boolean esPersonal = esPersonal(usuario);
         
@@ -50,7 +50,7 @@ public class PedidoService {
                     : "El tipo de entrega debe ser DELIVERY o RETIRO");
         }
         
-        // Si pidió delivery, sí o sí tiene que haber puesto una dirección.
+        // Si pidió delivery, se exige que haya una dirección de entrega
         String direccion = request.direccionEntrega() == null ? "" : request.direccionEntrega().trim();
         if (tipoEntrega.equals("DELIVERY") && direccion.isEmpty()) {
             throw new IllegalArgumentException("Ingresá una dirección para el delivery");
@@ -58,7 +58,7 @@ public class PedidoService {
 
         Pedido pedido = new Pedido();
         
-        // 3. Acá armamos el perfil de quién hace el pedido.
+        // 3. Se arma el perfil de quién hace el pedido.
         if (esPersonal) {
             // Si el que carga el pedido es el cajero, tomamos el nombre del cliente que le dictó en el local.
             String nombre = request.clienteNombre() == null ? "" : request.clienteNombre().trim();
@@ -92,23 +92,23 @@ public class PedidoService {
                 throw new IllegalArgumentException("Cada ítem necesita productoId y una cantidad mayor a 0");
             }
 
-            // Buscamos el producto en la BD. Si no existe, cortamos todo.
+            // Buscamos el producto en la BD. Si no existe cancelamos
             Producto producto = productoRepository.findById(item.productoId())
                     .orElseThrow(() -> new IllegalArgumentException("El producto " + item.productoId() + " no existe"));
 
-            // Nos aseguramos de que no estén pidiendo algo que sacamos del menú.
+            // Nos aseguramos de que no estén pidiendo algo que sacamos del menú
             if (Boolean.FALSE.equals(producto.getActivo())) {
                 throw new IllegalArgumentException("El producto \"" + producto.getNombre() + "\" no está disponible");
             }
 
-            // 5. Control de Stock.
+            // 5. Control de Stock
             int stock = producto.getStock() == null ? 0 : producto.getStock();
             if (stock < item.cantidad()) {
                 throw new IllegalArgumentException("Stock insuficiente de \"" + producto.getNombre()
                         + "\" (disponible: " + stock + ")");
             }
 
-            // Descontamos lo que compraron del stock real y lo guardamos.
+            // Descontamos lo que compraron del stock real
             producto.setStock(stock - item.cantidad());
             productoRepository.save(producto);
 
@@ -120,17 +120,17 @@ public class PedidoService {
         }
 
         pedido.setTotal(total);
-        // Guardamos el pedido finalizado en la Base de Datos y lo devolvemos.
+        // Guardamos el pedido finalizado en la Base de Datos y lo devolvemos
         return pedidoRepository.save(pedido);
     }
 
-    // Método auxiliar (privado) para saber rápido si el usuario es del staff.
+    // Método auxiliar para saber si el usuario es del staff.
     private boolean esPersonal(Usuario usuario) {
         return "ADMIN".equalsIgnoreCase(usuario.getRol()) || "EMPLEADO".equalsIgnoreCase(usuario.getRol());
     }
 
     /**
-     * Cambia el estado validando que la transición sea lógica (ej. no pasar de ENTREGADO a PREPARANDO).
+     * Cambia el estado validando que la transición sea lógica
      * Si el pedido se cancela por algún motivo, ejecuta el reintegro de stock automático.
      */
     @Transactional
@@ -140,12 +140,12 @@ public class PedidoService {
                 .orElseThrow(() -> new NoSuchElementException("El pedido " + id + " no existe"));
 
         EstadoPedido actual = pedido.getEstado();
-        // Validamos la lógica de negocio: ¿Tiene sentido este cambio de estado?
+        // Validamos la lógica de negocio
         if (actual == null || !actual.puedePasarA(nuevoEstado)) {
             throw new IllegalArgumentException("No se puede pasar de " + actual + " a " + nuevoEstado);
         }
 
-        // Si se cancela la orden, llamamos al método que devuelve las hamburguesas a la heladera (al stock).
+        // Si se cancela la orden, llamamos al método que devuelve las hamburguesas al stock
         if (nuevoEstado == EstadoPedido.CANCELADO) {
             reponerStock(pedido);
         }
@@ -165,7 +165,6 @@ public class PedidoService {
         }
     }
 
-    // (readOnly = true) optimiza la consulta porque le avisa a Spring que no vamos a modificar nada, solo a leer.
     // Trae los pedidos para la vista de la cocina (los que no están cancelados ni entregados).
     @Transactional(readOnly = true)
     public List<Pedido> getPedidosActivos() {

@@ -2,6 +2,8 @@ package burgerflow.PNT.model;
 
 import jakarta.persistence.*;
 
+// Esta clase representa un usuario del sistema
+
 @Entity
 @Table(name = "usuarios")
 public class Usuario {

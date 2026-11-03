@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// Este controlador maneja las rutas relacionadas con los usuarios, proporcionando endpoints REST para listar usuarios y cambiar su estado.
+
 @RestController
 @RequestMapping("/api/usuarios")
 public class UserRestController {
@@ -17,13 +19,13 @@ public class UserRestController {
         this.dataService = dataService;
     }
 
-    // GET /api/usuarios
+    // GET: Devuelve la lista de todos los usuarios.
     @GetMapping
     public List<Usuario> listarUsuariosApi() {
         return dataService.getUsuarios();
     }
 
-    // PATCH /api/usuarios/{id}/estado
+    // PATCH: Endpoint para cambiar el estado de un usuario (activo/inactivo).
     @PatchMapping("/{id}/estado")
     public ResponseEntity<Void> cambiarEstadoUsuarioApi(@PathVariable Long id) {
         dataService.cambiarEstadoUsuario(id);

@@ -2,6 +2,8 @@ package burgerflow.PNT.model;
 
 import jakarta.persistence.*;
 
+// Esta clase representa un producto disponible en el sistema
+
 @Entity
 @Table(name = "productos")
 public class Producto {
@@ -16,11 +18,10 @@ public class Producto {
     private Integer stock;
     private String categoria;
     private String imagen;
-
     // Estado para la gestión de alta/baja lógica (por defecto activo)
     private Boolean activo = true;
 
-    public Producto() {} // Requerido por JPA
+    public Producto() {}
 
     public Producto(Long id, String nombre, String descripcion, Double precio, Integer stock, String categoria, String imagen, Boolean activo) {
         this.id = id;
@@ -33,7 +34,6 @@ public class Producto {
         this.activo = activo != null ? activo : true;
     }
 
-    // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

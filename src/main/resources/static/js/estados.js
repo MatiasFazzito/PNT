@@ -1,3 +1,6 @@
+// Estados de pedido y transiciones permitidas
+
+// Etiquetas para mostrar en la interfaz
 const ETIQUETAS_ESTADO = {
   RECIBIDO: 'Recibido',
   EN_PREPARACION: 'En preparación',
@@ -6,7 +9,7 @@ const ETIQUETAS_ESTADO = {
   CANCELADO: 'Cancelado'
 };
 
-// Espejo de EstadoPedido.siguientesPermitidos() del backend
+// Transiciones de estado permitidas
 const TRANSICIONES_ESTADO = {
   RECIBIDO: ['EN_PREPARACION', 'CANCELADO'],
   EN_PREPARACION: ['LISTO_PARA_ENTREGAR', 'CANCELADO'],

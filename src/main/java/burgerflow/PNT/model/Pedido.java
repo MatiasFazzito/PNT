@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+// Esta clase representa un pedido realizado por un cliente
+
 @Entity
 @Table(name = "pedidos")
 public class Pedido {
@@ -33,7 +35,7 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<DetallePedido> items = new ArrayList<>();
 
-    public Pedido() {} // Requerido por JPA
+    public Pedido() {}
 
     public Pedido(Long id, String clienteEmail, EstadoPedido estado, Double total, String tipoEntrega) {
         this.id = id;
@@ -48,7 +50,6 @@ public class Pedido {
         items.add(item);
     }
 
-    // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

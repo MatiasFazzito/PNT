@@ -24,11 +24,11 @@ public enum EstadoPedido {
         };
     }
 
+    // Verifica si el pedido puede pasar al nuevo estado según el flujo definido.
     public boolean puedePasarA(EstadoPedido nuevo) {
         return siguientesPermitidos().contains(nuevo);
     }
 
-    // Un pedido activo es el que cocina todavía tiene que atender
     public boolean esActivo() {
         return this != ENTREGADO && this != CANCELADO;
     }

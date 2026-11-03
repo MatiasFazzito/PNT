@@ -9,7 +9,7 @@ public record PedidoRequest(
         String tipoEntrega,
         String direccionEntrega,
         String observaciones,
-        String clienteNombre,   // solo lo usa el personal (ADMIN/EMPLEADO) en pedidos de mostrador
+        String clienteNombre,
         List<ItemRequest> items) {
 
     public record ItemRequest(Long productoId, Integer cantidad) {}

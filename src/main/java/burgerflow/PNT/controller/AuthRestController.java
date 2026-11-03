@@ -47,20 +47,20 @@ public class AuthRestController {
     }
 
     @PostMapping("/registro")
-public ResponseEntity<?> registrar(@RequestBody Usuario usuario, HttpSession session) {
-    if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("mensaje", "El email ya se encuentra registrado"));
+    public ResponseEntity<?> registrar(@RequestBody Usuario usuario, HttpSession session) {
+        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("mensaje", "El email ya se encuentra registrado"));
+        }
+
+        if (usuario.getRol() == null || usuario.getRol().isBlank()) {
+            usuario.setRol("CLIENTE");
+        }
+
+        Usuario nuevoUsuario = usuarioRepository.save(usuario);
+
+        session.setAttribute("usuario", nuevoUsuario);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
     }
-
-    if (usuario.getRol() == null || usuario.getRol().isBlank()) {
-        usuario.setRol("CLIENTE");
-    }
-
-    Usuario nuevoUsuario = usuarioRepository.save(usuario);
-
-    session.setAttribute("usuario", nuevoUsuario);
-
-    return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
-}
 }

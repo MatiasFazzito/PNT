@@ -1,7 +1,7 @@
 package burgerflow.PNT.controller;
 
 import burgerflow.PNT.model.Usuario;
-import burgerflow.PNT.repository.UsuarioRepository;
+import burgerflow.PNT.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +14,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthRestController {
+public class AuthController {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UsuarioService usuarioService;
 
-    public AuthRestController(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public AuthController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
     @PostMapping("/login")
@@ -32,13 +32,12 @@ public class AuthRestController {
                     .body(Map.of("mensaje", "Debe proporcionar email y password"));
         }
 
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmailAndPassword(email, password);
+        // Llamamos al servicio en lugar del repositorio
+        Optional<Usuario> usuarioOpt = usuarioService.buscarPorEmailAndPassword(email, password);
 
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
-
             session.setAttribute("usuario", usuario);
-
             return ResponseEntity.ok(usuario);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -48,7 +47,8 @@ public class AuthRestController {
 
     @PostMapping("/registro")
     public ResponseEntity<?> registrar(@RequestBody Usuario usuario, HttpSession session) {
-        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
+        // Validamos a través del servicio
+        if (usuarioService.buscarPorEmail(usuario.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("mensaje", "El email ya se encuentra registrado"));
         }
@@ -57,7 +57,8 @@ public class AuthRestController {
             usuario.setRol("CLIENTE");
         }
 
-        Usuario nuevoUsuario = usuarioRepository.save(usuario);
+        // Guardamos a través del servicio
+        Usuario nuevoUsuario = usuarioService.guardar(usuario);
 
         session.setAttribute("usuario", nuevoUsuario);
 

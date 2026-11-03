@@ -2,7 +2,6 @@ package burgerflow.PNT.controller;
 
 import burgerflow.PNT.model.EstadoPedido;
 import burgerflow.PNT.model.Usuario;
-import burgerflow.PNT.service.DataService;
 import burgerflow.PNT.service.PedidoService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -15,11 +14,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/cocina")
 public class KitchenController {
 
-    private final DataService dataService;
     private final PedidoService pedidoService;
 
-    public KitchenController(DataService dataService, PedidoService pedidoService) {
-        this.dataService = dataService;
+    public KitchenController(PedidoService pedidoService) {
         this.pedidoService = pedidoService;
     }
 
@@ -38,7 +35,7 @@ public class KitchenController {
             return "redirect:/";
         }
 
-        model.addAttribute("pedidos", dataService.getPedidos());
+        model.addAttribute("pedidos", pedidoService.getPedidosActivos());
         return "cocina";
     }
 

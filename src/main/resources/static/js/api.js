@@ -167,6 +167,23 @@ const Api = {
     if (!res.ok) throw new Error('Error al cambiar el estado del usuario');
   },
 
+  actualizarUsuario: async (id, datosUsuario) => {
+    const response = await fetch(`/api/usuarios/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datosUsuario)
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.mensaje || 'Error al actualizar el usuario');
+    }
+
+    return response.json();
+  },
+
   async pedidosCocina() {
     try {
       const response = await fetch('/api/pedidos/activos');

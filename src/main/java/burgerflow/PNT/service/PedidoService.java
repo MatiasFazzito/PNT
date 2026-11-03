@@ -188,4 +188,9 @@ public class PedidoService {
     public List<Pedido> getPedidosDeCliente(String email) {
         return pedidoRepository.findByClienteEmailOrderByFechaCreacionDesc(email);
     }
+
+    @Transactional(readOnly = true)
+    public List<Pedido> listarPedidos() {
+        return pedidoRepository.findAll();
+    }
 }

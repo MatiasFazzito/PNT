@@ -1,7 +1,7 @@
 package burgerflow.PNT.controller;
 
 import burgerflow.PNT.model.Usuario;
-import burgerflow.PNT.service.DataService;
+import burgerflow.PNT.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,24 +11,30 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
-public class UserRestController {
+public class UserController {
 
-    private final DataService dataService;
+    private final UsuarioService usuarioService;
 
-    public UserRestController(DataService dataService) {
-        this.dataService = dataService;
+    public UserController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
     // GET: Devuelve la lista de todos los usuarios.
     @GetMapping
     public List<Usuario> listarUsuariosApi() {
-        return dataService.getUsuarios();
+        return usuarioService.listarUsuarios();
     }
 
     // PATCH: Endpoint para cambiar el estado de un usuario (activo/inactivo).
     @PatchMapping("/{id}/estado")
     public ResponseEntity<Void> cambiarEstadoUsuarioApi(@PathVariable Long id) {
-        dataService.cambiarEstadoUsuario(id);
+        usuarioService.cambiarEstadoUsuario(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> actualizarUsuarioApi(@PathVariable Long id, @RequestBody Usuario usuario) {
+        Usuario actualizado = usuarioService.actualizarUsuario(id, usuario);
+        return ResponseEntity.ok(actualizado);
     }
 }

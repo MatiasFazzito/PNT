@@ -23,72 +23,73 @@ public class DataInitializer {
             // Inserta productos si la tabla está vacía
             if (productoRepository.count() == 0) {
                 // --- CATEGORÍA: HAMBURGUESAS ---
+                productoRepository.save(new Producto(null, "BurgerFlow Clásica Simple",
+                        "Medallón de carne seleccionado, cheddar fundido, lechuga y tomate", 6500.0, 20, "Hamburguesas",
+                        "/Images/burgerClasicaSimple.jpg", true));               
                 productoRepository.save(new Producto(null, "BurgerFlow Doble Bacon",
                         "Doble carne, cheddar y bacon crocante", 8500.0, 10, "Hamburguesas",
                         "/Images/burgerDobleCarne.jpg", true));
                 productoRepository.save(new Producto(null, "BurgerFlow Mega Triple",
                         "Triple carne, triple cheddar, bacon y salsa especial de la casa", 11000.0, 8, "Hamburguesas",
-                        "/Images/burgerDobleCarne.jpg", true));
+                        "/Images/burgerTripleCarne.jpg", true));
                 productoRepository.save(new Producto(null, "BurgerFlow Crispy Chicken",
                         "Pollo crispy, lechuga fresca, tomate y mayonesa al ajo", 7800.0, 12, "Hamburguesas",
-                        "/Images/burgerDobleCarne.jpg", true));
+                        "/Images/burgerCrispyChicken.jpg", true));
                 productoRepository.save(new Producto(null, "BurgerFlow Veggie Mushroom",
                         "Medallón de legumbres, hongos portobello salteados y queso vegano", 8200.0, 15, "Hamburguesas",
-                        "/Images/burgerDobleCarne.jpg", true));
-                productoRepository.save(new Producto(null, "BurgerFlow Clásica Simple",
-                        "Medallón de carne seleccionado, cheddar fundido, lechuga y tomate", 6500.0, 20, "Hamburguesas",
-                        "/Images/burgerDobleCarne.jpg", true));
+                        "/Images/burgerVeggieMushroom.jpg", true));
+
 
                 // --- CATEGORÍA: ACOMPAÑAMIENTOS ---
+                productoRepository.save(new Producto(null, "Papas Fritas Clásicas",
+                        "Porción grande de papas doradas, crujientes y sal marina", 3500.0, 25, "Acompañamientos",
+                        "/Images/papasClasicas.jpg", true));
                 productoRepository.save(new Producto(null, "Papas Cheeseburger",
                         "Papas fritas con cheddar fundido y panceta picada", 4200.0, 15, "Acompañamientos",
                         "/Images/papasCheddar.jpg", true));
-                productoRepository.save(new Producto(null, "Papas Fritas Clásicas",
-                        "Porción grande de papas doradas, crujientes y sal marina", 3500.0, 25, "Acompañamientos",
-                        "/Images/papasCheddar.jpg", true));
                 productoRepository.save(new Producto(null, "Aros de Cebolla Rebozados",
                         "Aros de cebolla crujientes acompañados de salsa tártara", 3900.0, 18, "Acompañamientos",
-                        "/Images/papasCheddar.jpg", true));
+                        "/Images/arosCebollaRebozados.jpg", true));
                 productoRepository.save(new Producto(null, "Bastones de Mozzarella",
                         "6 bastones empanados con orégano y salsa marinara", 4800.0, 10, "Acompañamientos",
-                        "/Images/papasCheddar.jpg", true));
+                        "/Images/bastonesMozzarella.jpg", true));
                 productoRepository.save(new Producto(null, "Nuggets de Pollo Crocantes",
                         "8 unidades de pollo tierno con salsa barbacoa", 4100.0, 20, "Acompañamientos",
-                        "/Images/papasCheddar.jpg", true));
+                        "/Images/nuggetsPolloCrocantes.jpg", true));
 
                 // --- CATEGORÍA: BEBIDAS ---
+                productoRepository.save(new Producto(null, "Agua Mineral 500ml",
+                        "Agua sin gas o con gas", 1500.0, 40, "Bebidas",
+                        "/Images/aguaMineral.jpg", true));
                 productoRepository.save(new Producto(null, "Gaseosa 500ml",
                         "Línea Coca-Cola bien fría", 1800.0, 30, "Bebidas",
                         "/Images/gaseosaCocaCola.jpg", true));
                 productoRepository.save(new Producto(null, "Limonada con Menta y Jengibre",
                         "Vaso de 500ml refrescante y natural", 2200.0, 20, "Bebidas",
-                        "/Images/gaseosaCocaCola.jpg", true));
+                        "/Images/limonada.jpg", true));
                 productoRepository.save(new Producto(null, "Cerveza Artesanal IPA 500ml",
                         "Pinta rubia artesanal bien fría", 3200.0, 15, "Bebidas",
-                        "/Images/gaseosaCocaCola.jpg", true));
-                productoRepository.save(new Producto(null, "Agua Mineral 500ml",
-                        "Agua sin gas o con gas", 1500.0, 40, "Bebidas",
-                        "/Images/gaseosaCocaCola.jpg", true));
+                        "/Images/cervezaIpa.jpg", true));
                 productoRepository.save(new Producto(null, "Jugo de Naranja Natural",
                         "Exprimido fresco del día (400ml)", 2500.0, 12, "Bebidas",
-                        "/Images/gaseosaCocaCola.jpg", true));
+                        "/Images/jugoNaranja.jpg", true));
 
                 // --- CATEGORÍA: POSTRES ---
                 productoRepository.save(new Producto(null, "Helado de Dulce de Leche Granizado",
                         "Copa artesanal de 2 bochas", 2800.0, 15, "Postres",
-                        "/Images/gaseosaCocaCola.jpg", true));
+                        "/Images/helado.jpg", true));
                 productoRepository.save(new Producto(null, "Volcán de Chocolate",
                         "Torta húmeda tibia con corazón de chocolate fundido y bocha de helado", 3800.0, 10, "Postres",
-                        "/Images/gaseosaCocaCola.jpg", true));
+                        "/Images/volcan.jpg", true));
                 productoRepository.save(new Producto(null, "Cheesecake de Frutos Rojos",
                         "Porción clásica con coulis de frutos rojos", 3600.0, 8, "Postres",
-                        "/Images/gaseosaCocaCola.jpg", true));
+                        "/Images/torta.jpg", true));
                 productoRepository.save(new Producto(null, "Brownie con Nueces",
                         "Cuadrado de chocolate intenso con nueces tostadas", 2900.0, 12, "Postres",
-                        "/Images/gaseosaCocaCola.jpg", true));
+                        "/Images/brownie.jpg", true));
                 productoRepository.save(new Producto(null, "Milkshake de Oreo",
                         "Batido espeso de vainilla con trozos de galletitas", 3400.0, 14, "Postres",
-                        "/Images/gaseosaCocaCola.jpg", true));
+                        "/Images/milkshake.jpg", true));
             }
 
             // Asigna imagen por defecto si algún producto quedó sin ella en bases existentes
